@@ -1,0 +1,131 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+	<title>English irregular verbs</title> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
+	
+	<style>
+						
+                .display div{
+                    width:20%;
+                    height:5em;
+                    background:green;
+                    margin-bottom:1em;
+                }
+                
+                .things div{
+                    width:10%;
+                    height:2em;
+                    background:yellow;
+                    margin-bottom:1em;
+                }
+                
+                
+
+	</style>
+	
+    <script>
+
+        function start(e) {        
+                e.dataTransfer.setData("text",  $(e.target).text() );                   
+                return true;
+              }
+
+        function drop(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                var text = e.dataTransfer.getData("text");
+                $(e.target).text(text);      
+                return false;
+              }
+                            
+       var data = {"verbs":[
+               {"tenses":["have","had","had"], "fakes":["afake1", "bfake2"]},
+               {"tenses":["do","did","done"], "fakes":["efake1", "ffake2"]},
+               {"tenses":["be","were","been"], "fakes":["ifake1", "jfake2"]}               
+       ]};
+       
+       //shufle array
+       function shuffle(o) {        
+            for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+            return o;
+        };
+        
+       // return random number: 0-2
+       function getRandomNumber(){
+           return Math.round( Math.random() * 2 );
+       }
+                        
+       function counter() {
+            var n = 0;
+            return function() { if( n >= data.verbs.length) n = 0; return n++; };            
+       }
+       
+       var idx = counter();
+       
+       var verb = null;
+       
+       function getVerb(){
+           return data.verbs[ idx() ];
+       }
+       
+       function showVerb( verb ){
+           verb = getVerb();
+           var random = getRandomNumber();
+           var selector = "#tense" + random;
+           $( selector ).text( verb.tenses[ random ] );
+           lockBox( selector );
+       }
+       
+       function lockBox( selector ){
+           $( selector ).attr("ondragover", "return true");
+       }
+            
+       $(document).ready(function() {           
+            shuffle(  data.verbs );            
+            showVerb( verb );
+        });
+                
+     
+    </script>	
+			
+</head> 
+<body> 
+
+<div data-role="page" data-theme="b">
+
+    <div data-role="header" data-position="fixed">
+            <a href="index.html" data-role="button" data-icon="arrow-l" data-iconpos="left" >Back</a> 
+            <h1>Practice</h1>					
+            <a href="index.html" data-icon="info" class="ui-btn-right">Voice</a>
+    </div><!-- /header -->
+
+    <div data-role="content" >	
+	  
+        <div class="display">
+            <div id="tense0" ondragover="return false" ondrop="return drop(event)" ></div>
+            <div id="tense1" ondragover="return false" ondrop="return drop(event)" ></div>
+            <div id="tense2" ondragover="return false" ondrop="return drop(event)" ></div>
+        </div>
+
+        <div class="things">
+            <div id="thing0" draggable="true" ondragstart="return start(event)" >have1</div>
+            <div id="thing1" draggable="true" ondragstart="return start(event)" >have2</div>
+            <div id="thing2" draggable="true" ondragstart="return start(event)" >have3</div>
+            <div id="thing3" draggable="true" ondragstart="return start(event)" >have4</div>
+            <div id="thing4" draggable="true" ondragstart="return start(event)" >have5</div>
+            <div id="thing5" draggable="true" ondragstart="return start(event)" >have6</div>        
+        </div>
+	
+    </div><!-- /content -->
+
+    <div data-role="footer" data-position="fixed" class="ui-bar">
+        <a href="index.html" data-role="button" data-icon="gear" data-iconpos="left" >Setting</a> 
+    </div><!-- /footer -->
+
+</div><!-- /page -->
+
+</body>
+</html>
