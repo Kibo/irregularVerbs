@@ -2,130 +2,253 @@
 <html> 
 	<head> 
 	<title>English irregular verbs</title> 
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" />
-	<script type="text/javascript" src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
-	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0b1/jquery.mobile-1.0b1.min.css" />
+        <script src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.0b1/jquery.mobile-1.0b1.min.js"></script>
+                
+        <script src="js/jquery/jquery-ui-1.8.13.bounceEffect.min.js"></script>
+        
+        
+        <!-- kibo -->      
+        <script src="js/dictionary.js"></script>
 	
-	<style>
-						
-                .display div{
+	<style>						
+                .tenses div{
                     width:20%;
                     height:5em;
                     background:green;
                     margin-bottom:1em;
                 }
                 
-                .things div{
+                .options div{
                     width:10%;
                     height:2em;
                     background:yellow;
                     margin-bottom:1em;
                 }
                 
+                #controls{
+                    display:none;
+                }    
                 
-
+                .center{text-align: center;}
+                              
 	</style>
 	
-    <script>
-
-        function start(e) {        
+    <script> 
+        //## SETUP #####################
+        var lives = 3;
+        var bonus = 0;       
+        var difficulty = 2; // 0,1,2                
+        
+       //##############################
+       var dictionary = new Dictionary();
+       
+       function goHome(){  
+           window.location.href="index.html";
+           //$.mobile.changePage( "index.html", { reloadPage: true} );
+       }
+                           
+       function lockTenses(){
+           for(var i = 0; i<=2; i++){               
+               $("#tense" + i).attr("ondragover", "return true");
+           }           
+       }
+       
+       function unlockTenses(){
+           for(var i = 0; i<=2; i++){   
+               $("#tense" + i).text("");
+               $("#tense" + i).attr("ondragover", "return false");
+           }           
+       }
+                    
+       function showOptions(){     
+           $('.options').empty();
+           var options = dictionary.getOptions( difficulty );
+           for(var i = 0; i <= ( options.length - 1 ); i++){                              
+               $('.options').append("<div draggable=\"true\" ondragstart=\"return start(event)\" >" + options[i] + "</div>");                                                         
+           }                      
+       }
+              
+       function showTense(){            
+           unlockTenses();
+           var random = dictionary.random();
+           var tense = dictionary.getVerb().tenses[random];
+           var selector = "#tense" + random;
+           $( selector ).text( tense );
+           $( selector ).attr("ondragover", "return true");
+           
+           showOptions();              
+       }
+                    
+       function nextVerb(){
+           dictionary.idx.next();
+           showTense();           
+           switchVisibility();
+       }
+       
+       function showStatus(){                      
+          $(".bonus").text("Coin: " + bonus);
+          $(".lives").text("Lives: " + lives);   
+          checkStatus(); 
+       }
+       
+       function checkStatus(){         
+           if(lives <= 0){                              
+               $("#state").text( "GAME OVER!" );
+               $.mobile.changePage("#gameover");
+           }else if(bonus >= dictionary.data.length){              
+               $(".bonus").text("Coin: " + (bonus * lives) );
+               $("#state").text( "YOU ARE WINNER!" );
+               $.mobile.changePage("#gameover");
+           }             
+       }
+             
+       
+       function check(){
+           var isError = false;
+           for(var i = 0; i<=2; i++){                 
+                if( $("#tense" + i).text() != dictionary.getVerb().tenses[i] ){
+                    isError = true;
+                    $("#tense" + i ).effect("bounce", { times:3 }, 200);                
+                }                  
+           } 
+           
+           (isError) ? lives-- : bonus++ ;
+           showStatus();           
+           switchVisibility();                     
+       }
+       
+       function switchVisibility(){
+           if ( $("#controls").is(":hidden")){
+               $("#controls").show();              
+           }else{
+               $("#controls").hide();              
+           }           
+       }
+       
+       function start(e) {        
                 e.dataTransfer.setData("text",  $(e.target).text() );                   
                 return true;
               }
 
-        function drop(e) {
+       function drop(e) {
                 e.stopPropagation();
                 e.preventDefault();
                 var text = e.dataTransfer.getData("text");
-                $(e.target).text(text);      
-                return false;
-              }
-                            
-       var data = {"verbs":[
-               {"tenses":["have","had","had"], "fakes":["afake1", "bfake2"]},
-               {"tenses":["do","did","done"], "fakes":["efake1", "ffake2"]},
-               {"tenses":["be","were","been"], "fakes":["ifake1", "jfake2"]}               
-       ]};
-       
-       //shufle array
-       function shuffle(o) {        
-            for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-            return o;
-        };
-        
-       // return random number: 0-2
-       function getRandomNumber(){
-           return Math.round( Math.random() * 2 );
-       }
-                        
-       function counter() {
-            var n = 0;
-            return function() { if( n >= data.verbs.length) n = 0; return n++; };            
-       }
-       
-       var idx = counter();
-       
-       var verb = null;
-       
-       function getVerb(){
-           return data.verbs[ idx() ];
-       }
-       
-       function showVerb( verb ){
-           verb = getVerb();
-           var random = getRandomNumber();
-           var selector = "#tense" + random;
-           $( selector ).text( verb.tenses[ random ] );
-           lockBox( selector );
-       }
-       
-       function lockBox( selector ){
-           $( selector ).attr("ondragover", "return true");
-       }
-            
-       $(document).ready(function() {           
-            shuffle(  data.verbs );            
-            showVerb( verb );
-        });
+                $(e.target).text(text);  
                 
-     
+                if ($("#tense0").text() && 
+                    $("#tense1").text() && 
+                    $("#tense2").text() ){
+                      lockTenses();
+                      check();
+                }                              
+       }
+                                                 
+       $(document).ready(function() {                                                               
+           dictionary.init();
+           showStatus();
+           showTense();   
+           
+        });
+                     
     </script>	
 			
 </head> 
 <body> 
+    
+ <div data-role="page" data-theme="b" id="home">
+     
+      <div data-role="header" data-position="fixed">           
+            <h1>Home</h1>					           
+    </div><!-- /header -->
 
-<div data-role="page" data-theme="b">
+    <div data-role="content" >	
+	          
+            <a href="#game" data-role="button" >Start game</a>
+            <a href="#topten" data-role="button">Top five</a>
+            <a href="#about" data-role="button">About</a>           
+        	
+    </div><!-- /content -->
+
+   <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true">        
+        <div class="ui-grid-a">
+            <div class="ui-block-a"><div class="bonus" ></div></div>
+            <div class="ui-block-b"><div class="lives"></div></div>	   
+        </div>                                                               
+    </div><!-- /footer -->
+        
+ </div> <!-- /home -->
+
+<div data-role="page" data-theme="b" id="game">
 
     <div data-role="header" data-position="fixed">
-            <a href="index.html" data-role="button" data-icon="arrow-l" data-iconpos="left" >Back</a> 
-            <h1>Practice</h1>					
-            <a href="index.html" data-icon="info" class="ui-btn-right">Voice</a>
+            <a href="#home" onclick="window.location.href='index.html'" data-role="button" data-icon="home" data-iconpos="notext" title="home">Home</a> 
+            <h1>Game</h1>					           
     </div><!-- /header -->
 
     <div data-role="content" >	
 	  
-        <div class="display">
+        <div class="tenses">
             <div id="tense0" ondragover="return false" ondrop="return drop(event)" ></div>
             <div id="tense1" ondragover="return false" ondrop="return drop(event)" ></div>
             <div id="tense2" ondragover="return false" ondrop="return drop(event)" ></div>
         </div>
 
-        <div class="things">
-            <div id="thing0" draggable="true" ondragstart="return start(event)" >have1</div>
-            <div id="thing1" draggable="true" ondragstart="return start(event)" >have2</div>
-            <div id="thing2" draggable="true" ondragstart="return start(event)" >have3</div>
-            <div id="thing3" draggable="true" ondragstart="return start(event)" >have4</div>
-            <div id="thing4" draggable="true" ondragstart="return start(event)" >have5</div>
-            <div id="thing5" draggable="true" ondragstart="return start(event)" >have6</div>        
-        </div>
+        <div class="options"></div>
+                               
+        <div id="controls" class="ui-grid-a" >
+            <div class="ui-block-a"><button type="button" data-theme="c" data-icon="info" data-iconpos="left" title="Speech">Speech</button></div>
+            <div class="ui-block-b"><button type="button" data-theme="b" onclick="nextVerb()" data-icon="arrow-r" data-iconpos="right" title="Next">Next</button></div>	   
+        </div>                        
 	
     </div><!-- /content -->
 
-    <div data-role="footer" data-position="fixed" class="ui-bar">
-        <a href="index.html" data-role="button" data-icon="gear" data-iconpos="left" >Setting</a> 
+    <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true">        
+        <div class="ui-grid-a">
+            <div class="ui-block-a"><div class="bonus" ></div></div>
+            <div class="ui-block-b"><div class="lives"></div></div>	   
+        </div>                                                               
     </div><!-- /footer -->
 
-</div><!-- /page -->
+</div><!-- /game -->
+
+
+<div data-role="page" data-theme="b" id="gameover">
+    
+    
+    <div data-role="header" data-position="fixed">
+            <a href="#home" onclick="window.location.href='index.html'"  data-role="button" data-icon="home" data-iconpos="notext" title="home">Home</a> 
+            <h1>Game over</h1>					           
+    </div><!-- /header -->
+
+    <div data-role="content" >	
+	  
+        <h2 id="state" class="center"></h2>
+                               
+        <div data-role="fieldcontain">            
+        	<label for="name">Name:</label>
+                <input type="text" name="name" id="name" value=""  />                  
+         
+                <div class="ui-grid-a">
+                    <div class="ui-block-a"><button type="button" data-theme="c" onclick="window.location.href='index.html'">Cancel</button></div>
+                    <div class="ui-block-b"><button type="button" data-theme="b">Save</button></div>	   
+                </div>
+        </div> 
+                	
+    </div><!-- /content -->
+
+     <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true">        
+        <div class="ui-grid-a">
+            <div class="ui-block-a"><div class="bonus" ></div></div>
+            <div class="ui-block-b"><div class="lives" id="score" ></div></div>	   
+        </div>                                                               
+    </div><!-- /footer -->
+            
+</div> <!-- /gameOver -->
+
+
 
 </body>
 </html>
