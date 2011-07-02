@@ -7,8 +7,7 @@
         <script src="http://code.jquery.com/mobile/1.0b1/jquery.mobile-1.0b1.min.js"></script>
                 
         <script src="js/jquery/jquery-ui-1.8.13.bounceEffect.min.js"></script>
-        
-        
+                
         <!-- kibo -->      
         <script src="js/dictionary.js"></script>
 	
@@ -26,29 +25,26 @@
                     background:yellow;
                     margin-bottom:1em;
                 }
-                
-                #controls{
-                    display:none;
-                }    
-                
-                .center{text-align: center;}
+                                                 
+               .center{text-align: center;}
+               
+               #nextButton{                                           
+                   display:none;
+               }
                               
 	</style>
 	
     <script> 
         //## SETUP #####################
-        var lives = 3;
-        var bonus = 0;       
-        var difficulty = 2; // 0,1,2                
+        var lives = localStorage.getItem("lives") != null ? localStorage.getItem("lives") : 3; // 1, 2, 3        
+        var countOfVerbs = localStorage.getItem("countOfVerbs") != null ? localStorage.getItem("countOfVerbs") : 10; // 10, 20, 30, 50, 100
         
+        var bonus = 0;       
+        var difficulty = 2; // 0,1,2      
+                
        //##############################
        var dictionary = new Dictionary();
-       
-       function goHome(){  
-           window.location.href="index.html";
-           //$.mobile.changePage( "index.html", { reloadPage: true} );
-       }
-                           
+                                        
        function lockTenses(){
            for(var i = 0; i<=2; i++){               
                $("#tense" + i).attr("ondragover", "return true");
@@ -88,8 +84,8 @@
        }
        
        function showStatus(){                      
-          $(".bonus").text("Coin: " + bonus);
-          $(".lives").text("Lives: " + lives);   
+          $(".bonus").text( bonus );
+          $(".lives").text( lives );   
           checkStatus(); 
        }
        
@@ -97,14 +93,13 @@
            if(lives <= 0){                              
                $("#state").text( "GAME OVER!" );
                $.mobile.changePage("#gameover");
-           }else if(bonus >= dictionary.data.length){              
-               $(".bonus").text("Coin: " + (bonus * lives) );
+           }else if( dictionary.idx.get() >= countOfVerbs-1){              
+               $(".bonus").text( (bonus * lives) );
                $("#state").text( "YOU ARE WINNER!" );
                $.mobile.changePage("#gameover");
-           }             
+           }           
        }
-             
-       
+                    
        function check(){
            var isError = false;
            for(var i = 0; i<=2; i++){                 
@@ -120,11 +115,11 @@
        }
        
        function switchVisibility(){
-           if ( $("#controls").is(":hidden")){
-               $("#controls").show();              
+           if (  $("#nextButton").is(':hidden') ){            
+              $("#nextButton").show();
            }else{
-               $("#controls").hide();              
-           }           
+               $("#nextButton").hide();              
+           }                     
        }
        
        function start(e) {        
@@ -145,13 +140,45 @@
                       check();
                 }                              
        }
+       
+       function setOptions(){
+           $("#select-lives").val( lives );
+           $("#select-verbs").val( countOfVerbs );                
+       }
                                                  
        $(document).ready(function() {                                                               
            dictionary.init();
            showStatus();
-           showTense();   
-           
+           showTense();             
+           createTopTenList();
+           setOptions();           
         });
+        
+        function createTopTenList(){
+            dictionary.checkResults();
+            $("#toptenList").empty();
+            var keys = dictionary.getSortedKeys();   
+            var results = JSON.parse( localStorage.getItem("results") );
+            for (i=0; i<=keys.length-1; i++){		
+                var bonus =  keys[i];
+		var name = results[bonus];             
+                $("#toptenList").append("<div>" + name + " "+  bonus + "</div>");
+             } 
+        }
+        
+        function saveResult(){
+            var bonus = $(".bonus:first").text();
+            var name = $("#name").attr("value");
+            dictionary.saveResults( bonus, name );   
+            createTopTenList();
+            $.mobile.changePage("#topten");
+        }
+        
+       function setOption( id ){
+           var name = $(id).attr("name"); 
+           var value = $(id).val();
+           localStorage.setItem( name, value );
+       }
                      
     </script>	
 			
@@ -160,27 +187,44 @@
     
  <div data-role="page" data-theme="b" id="home">
      
-      <div data-role="header" data-position="fixed">           
+      <div data-role="header" data-position="fixed">            
             <h1>Home</h1>					           
     </div><!-- /header -->
 
     <div data-role="content" >	
-	          
-            <a href="#game" data-role="button" >Start game</a>
-            <a href="#topten" data-role="button">Top five</a>
+	                         
+            <a href="#game" data-role="button" >Game</a>            
+            <a href="#topten" data-role="button">Top ten</a>
+            <a href="#search" data-role="button" >Search</a> 
             <a href="#about" data-role="button">About</a>           
         	
     </div><!-- /content -->
 
-   <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true">        
-        <div class="ui-grid-a">
-            <div class="ui-block-a"><div class="bonus" ></div></div>
-            <div class="ui-block-b"><div class="lives"></div></div>	   
-        </div>                                                               
+   <div data-role="footer" data-position="fixed"  class="ui-bar">         
+        <a href="#options" data-role="button" data-icon="gear">Options</a>                                                              
     </div><!-- /footer -->
         
  </div> <!-- /home -->
+ 
+ 
+  <div data-role="page" data-theme="b" id="topten">
+     
+      <div data-role="header" data-position="fixed"> 
+            <a href="#home" onclick="window.location.href='index.html'" data-role="button" data-icon="home" data-iconpos="notext" title="home">Home</a>            
+            <h1>Top ten</h1>					           
+    </div><!-- /header -->
 
+    <div data-role="content" >	
+	          
+        <div id="toptenList"></div>       
+        	
+    </div><!-- /content -->
+
+   <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true">                                                                            
+    </div><!-- /footer -->
+        
+ </div> <!-- /result -->
+  
 <div data-role="page" data-theme="b" id="game">
 
     <div data-role="header" data-position="fixed">
@@ -198,17 +242,17 @@
 
         <div class="options"></div>
                                
-        <div id="controls" class="ui-grid-a" >
-            <div class="ui-block-a"><button type="button" data-theme="c" data-icon="info" data-iconpos="left" title="Speech">Speech</button></div>
-            <div class="ui-block-b"><button type="button" data-theme="b" onclick="nextVerb()" data-icon="arrow-r" data-iconpos="right" title="Next">Next</button></div>	   
+        <div class="ui-grid-a" >
+            <div class="ui-block-a"><button type="button" data-theme="c" data-icon="info" data-iconpos="right" title="Speech">Sound</button></div>
+            <div class="ui-block-b"><div id="nextButton"><button type="button" data-theme="b" onclick="nextVerb()" data-icon="arrow-r" data-iconpos="right" title="Next"  >Next</button></div></div>	   
         </div>                        
 	
     </div><!-- /content -->
 
     <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true">        
         <div class="ui-grid-a">
-            <div class="ui-block-a"><div class="bonus" ></div></div>
-            <div class="ui-block-b"><div class="lives"></div></div>	   
+            <div class="ui-block-a"><span class="bonus" ></span></div>
+            <div class="ui-block-b"><span class="lives"></span></div>	   
         </div>                                                               
     </div><!-- /footer -->
 
@@ -216,38 +260,71 @@
 
 
 <div data-role="page" data-theme="b" id="gameover">
-    
-    
+        
     <div data-role="header" data-position="fixed">
             <a href="#home" onclick="window.location.href='index.html'"  data-role="button" data-icon="home" data-iconpos="notext" title="home">Home</a> 
             <h1>Game over</h1>					           
     </div><!-- /header -->
 
     <div data-role="content" >	
-	  
+	         
         <h2 id="state" class="center"></h2>
-                               
+        <h4 class="bonus center"></h4>
+                                      
         <div data-role="fieldcontain">            
         	<label for="name">Name:</label>
-                <input type="text" name="name" id="name" value=""  />                  
+                <input type="text" name="name" id="name" value="" placeholder="your name"  />                  
          
                 <div class="ui-grid-a">
                     <div class="ui-block-a"><button type="button" data-theme="c" onclick="window.location.href='index.html'">Cancel</button></div>
-                    <div class="ui-block-b"><button type="button" data-theme="b">Save</button></div>	   
+                    <div class="ui-block-b"><button onclick="saveResult();" type="button" data-theme="b">Save</button></div>	   
                 </div>
         </div> 
                 	
     </div><!-- /content -->
 
-     <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true">        
-        <div class="ui-grid-a">
-            <div class="ui-block-a"><div class="bonus" ></div></div>
-            <div class="ui-block-b"><div class="lives" id="score" ></div></div>	   
-        </div>                                                               
+     <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true">                                                                              
     </div><!-- /footer -->
             
 </div> <!-- /gameOver -->
 
+<div data-role="page" data-theme="b" id="options">
+        
+    <div data-role="header" data-position="fixed">
+            <a href="#home" onclick="window.location.href='index.html'"  data-role="button" data-icon="home" data-iconpos="notext" title="home">Home</a> 
+            <h1>Options</h1>					           
+    </div><!-- /header -->
+
+    <div data-role="content" >
+        
+         <div data-role="fieldcontain">
+            <label for="select-lives" class="select">Count of lives:</label>
+            <select name="lives" id="select-lives" data-native-menu="false" onchange="setOption( this );">
+                <option value="3">3 lives</option>  
+                <option value="2">2 lives</option>
+                <option value="1">1 live</option>                                                                         
+            </select>
+        </div>
+                                                
+        <div data-role="fieldcontain">
+            <label for="select-verbs" class="select">Count of verbs:</label>
+            <select name="countOfVerbs" id="select-verbs" data-native-menu="false" onchange="setOption( this );">                    
+                    <option value="10">10 verbs</option>
+                    <option value="20">20 verbs</option>
+                    <option value="30">30 verbs</option>
+                    <option value="30">40 verbs</option>
+                    <option value="30">50 verbs</option>
+                    <option value="100">100 verbs</option>
+            </select>
+        </div>
+               	                                        
+    </div><!-- /content -->
+
+     <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true">        
+                                                                     
+    </div><!-- /footer -->
+            
+</div> <!-- /options -->
 
 
 </body>
