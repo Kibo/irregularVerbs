@@ -9,8 +9,7 @@
         <script src="js/jquery/jquery-ui-1.8.13.bounceEffect.min.js"></script>
                 
         <!-- kibo -->      
-        <script src="js/dictionary.js"></script>
-	
+       	
 	<style>						
                 .tenses div{
                     width:20%;
@@ -34,152 +33,359 @@
                               
 	</style>
 	
-    <script> 
-        //## SETUP #####################
-        var lives = localStorage.getItem("lives") != null ? localStorage.getItem("lives") : 3; // 1, 2, 3        
-        var countOfVerbs = localStorage.getItem("countOfVerbs") != null ? localStorage.getItem("countOfVerbs") : 10; // 10, 20, 30, 50, 100
+    <script>
+        var DICTIONARY = {}
         
-        var bonus = 0;       
-        var difficulty = 2; // 0,1,2      
-                
-       //##############################
-       var dictionary = new Dictionary();
-                                        
-       function lockTenses(){
-           for(var i = 0; i<=2; i++){               
-               $("#tense" + i).attr("ondragover", "return true");
-           }           
-       }
-       
-       function unlockTenses(){
-           for(var i = 0; i<=2; i++){   
-               $("#tense" + i).text("");
-               $("#tense" + i).attr("ondragover", "return false");
-           }           
-       }
-                    
-       function showOptions(){     
-           $('.options').empty();
-           var options = dictionary.getOptions( difficulty );
-           for(var i = 0; i <= ( options.length - 1 ); i++){                              
-               $('.options').append("<div draggable=\"true\" ondragstart=\"return start(event)\" >" + options[i] + "</div>");                                                         
-           }                      
-       }
-              
-       function showTense(){            
-           unlockTenses();
-           var random = dictionary.random();
-           var tense = dictionary.getVerb().tenses[random];
-           var selector = "#tense" + random;
-           $( selector ).text( tense );
-           $( selector ).attr("ondragover", "return true");
-           
-           showOptions();              
-       }
-                    
-       function nextVerb(){
-           dictionary.idx.next();
-           showTense();           
-           switchVisibility();
-       }
-       
-       function showStatus(){                      
-          $(".bonus").text( bonus );
-          $(".lives").text( lives );   
-          checkStatus(); 
-       }
-       
-       function checkStatus(){         
-           if(lives <= 0){                              
-               $("#state").text( "GAME OVER!" );
-               $.mobile.changePage("#gameover");
-           }else if( dictionary.idx.get() >= countOfVerbs-1){              
-               $(".bonus").text( (bonus * lives) );
-               $("#state").text( "YOU ARE WINNER!" );
-               $.mobile.changePage("#gameover");
-           }           
-       }
-                    
-       function check(){
-           var isError = false;
-           for(var i = 0; i<=2; i++){                 
-                if( $("#tense" + i).text() != dictionary.getVerb().tenses[i] ){
-                    isError = true;
-                    $("#tense" + i ).effect("bounce", { times:3 }, 200);                
+        DICTIONARY.game = (function(){
+            var data;
+            var idx;
+            var utils;         
+            var tenses;
+            var setting;
+            var topten;
+            var errorManager;
+            var lives = localStorage.getItem("lives") != null ? localStorage.getItem("lives") : 3;
+            var countOfVerbs = localStorage.getItem("countOfVerbs") != null ? localStorage.getItem("countOfVerbs") : 10;        
+            var bonus = 0;
+            
+            function init(){
+                jQuery.event.props.push('dataTransfer');
+                utils = DICTIONARY.utils();
+                data = utils.shuffle( DICTIONARY.getData() );
+                setting = DICTIONARY.setting();
+                topten = DICTIONARY.topten();
+                errorManager = DICTIONARY.errorManager();
+                idx = DICTIONARY.idx();   
+                tenses = DICTIONARY.tenses();           
+                showTense();
+                showOptions();
+                bindEvents();
+                showStatus();
+                showTopTen();
+                showVerbsList();
+                showSetting();
+            }
+                                                           
+            function getVerb(){
+                return data[ idx.get() ];
+            }
+            
+            function nextVerb(){
+                idx.next();
+                showTense(); 
+                showOptions();
+                switchNextButton();
+            }
+                                   
+            function getOptions(){
+                var options = [ getVerb().tenses[0],
+                                getVerb().tenses[1],
+                                getVerb().tenses[2],
+                                getVerb().fakes[0],
+                                getVerb().fakes[1] 
+                             ];
+                return utils.shuffle( options );                             
+            }
+            
+            function showTense(){
+                tenses.unlock();
+                var random = utils.random();
+                var tense = getVerb().tenses[random];
+                var selector = "#tense" + random;
+                $( selector ).text( tense );
+                $( selector ).attr("ondragover", "return true");
+            }                                                                      
+            
+            function showOptions(){
+                $('.options').empty();
+                var options = getOptions();
+                for(var i = 0; i <= ( options.length - 1 ); i++){                              
+                    $('.options').append('<div draggable="true" >' + options[i] + '</div>');                                                                             
+                }
+                $('.options div').bind('dragstart', function(event){
+                    event.dataTransfer.setData("text",  $(event.target).text() );                     
+                    return true;                                        
+                });                                            
+            }
+            
+            function switchNextButton(){
+                if (  $("#nextButton").is(':hidden') ){            
+                    $("#nextButton").show();
+                }else{
+                    $("#nextButton").hide();              
                 }                  
-           } 
-           
-           (isError) ? lives-- : bonus++ ;
-           showStatus();           
-           switchVisibility();                     
-       }
-       
-       function switchVisibility(){
-           if (  $("#nextButton").is(':hidden') ){            
-              $("#nextButton").show();
-           }else{
-               $("#nextButton").hide();              
-           }                     
-       }
-       
-       function start(e) {        
-                e.dataTransfer.setData("text",  $(e.target).text() );                   
-                return true;
-              }
-
-       function drop(e) {
-                e.stopPropagation();
-                e.preventDefault();
-                var text = e.dataTransfer.getData("text");
-                $(e.target).text(text);  
+            }
+            
+            function showStatus(){                      
+                $(".bonus").text( bonus );
+                $(".lives").text( lives ); 
+                checkStatus();
+            }
+            
+            function showSetting(){
+                $("#select-lives").val( lives );
+                $("#select-verbs").val( countOfVerbs );                
+            }
+            
+            function showTopTen(){                 
+                 $("#toptenList").empty();  
+                 var toptenArray = topten.get();                 
+                 for(var i = 0; i < toptenArray.length; i++){ 
+                     var name = '<h3>' + toptenArray[i].name + '</h3>';
+                     var date = '<p class="ui-li-aside">' + toptenArray[i].date + '</p>';
+                     var bonus = '<p class="ui-li-count">' + toptenArray[i].bonus + '</p>';
+                     $("#toptenList").append('<li>' + name + date + bonus + '</li>');                    
+                 }                                                
+            }
+            
+            function showVerbsList(){
+                $("#verbsList").empty();
+                var verbs = DICTIONARY.getData();
+                var head;
+                for(var i=0; i < verbs.length; i++){
+                                                        
+                    $("#verbsList").append( 
+                        ((head != verbs[i].tenses[0][0].toUpperCase() ) ? '<li data-role="list-divider">' + verbs[i].tenses[0][0].toUpperCase() + '</li>' : '') + 
+                        '<li data-icon="info"> \
+                            <a href="#"> \
+                                <h3>' + verbs[i].tenses[0] + '</h3> \
+                                <p>' + verbs[i].tenses[0] +', ' + verbs[i].tenses[1] + ', ' + verbs[i].tenses[2] + '</p> \
+                            </a> \
+                        </li>\
+                        ');   
+                    
+                    head = verbs[i].tenses[0][0].toUpperCase();                    
+                }                         
+            }
+            
+            function checkStatus(){         
+               if(lives <= 0){                              
+                   $("#state").text( "GAME OVER!" );
+                   $.mobile.changePage("#gameover");
+               }else if( idx.get() >= countOfVerbs-1){              
+                   $(".bonus").text( (bonus * lives) );
+                   $("#state").text( "YOU ARE WINNER!" );
+                   $.mobile.changePage("#gameover");
+               }           
+            }
+            
+            function bindEvents(){      
+                $('.tenses div').bind('drop', function(event){
+                    event.stopPropagation();
+                    event.preventDefault();
+                    var text = event.dataTransfer.getData("text");                   
+                    $(event.target).text(text);  
+                    if ($("#tense0").text() && 
+                        $("#tense1").text() && 
+                        $("#tense2").text() ){
+                            tenses.lock();
+                            var isError = tenses.check( getVerb() );
+                            if(isError){
+                                lives--;
+                                errorManager.add(  getVerb().id );
+                            }else{
+                                bonus++;
+                                errorManager.remove( getVerb().id );
+                            }                                                       
+                            showStatus();
+                            switchNextButton();
+                    }                       
+                });     
                 
-                if ($("#tense0").text() && 
-                    $("#tense1").text() && 
-                    $("#tense2").text() ){
-                      lockTenses();
-                      check();
-                }                              
-       }
-       
-       function setOptions(){
-           $("#select-lives").val( lives );
-           $("#select-verbs").val( countOfVerbs );                
-       }
-                                                 
-       $(document).ready(function() {                                                               
-           dictionary.init();
-           showStatus();
-           showTense();             
-           createTopTenList();
-           setOptions();           
+                $('#nextButton').click( function(){nextVerb()} );
+                
+                $('#select-lives').change( function(event){ setting.set( event.target ); } );
+                $('#select-verbs').change( function(event){ setting.set( event.target ); } );       
+                
+                $('#saveResultsButton').click( function(){ 
+                    topten.save( bonus, $("#name").val() ); 
+                    showTopTen();
+                    $.mobile.changePage("#topten");
+                } );
+            }
+                                                          
+            return{
+                init: init 
+            }
+            
+        })();
+        
+        DICTIONARY.tenses = function(){
+        
+            function lock(){
+                for(var i = 0; i<=2; i++){               
+                    $("#tense" + i).attr("ondragover", "return true");
+                }
+            }
+            
+           function unlock(){
+               for(var i = 0; i<=2; i++){   
+                   $("#tense" + i).text("");
+                   $("#tense" + i).attr("ondragover", "return false");
+               }           
+            }
+            
+           function check( verb ){              
+                var isError = false;
+                for(var i = 0; i<=2; i++){                 
+                    if( $("#tense" + i).text() != verb.tenses[i] ){
+                        isError = true;
+                        $("#tense" + i ).effect("bounce", { times:3 }, 200);                
+                    }                  
+                } 
+                
+                return isError;                          
+            }
+            
+            return{
+                lock: lock,
+                check: check,
+                unlock: unlock
+            }                                
+        } 
+        
+        DICTIONARY.topten = function(){
+            
+            function save(bonus, name){                   
+                var topten =  localStorage.getItem("topten") != null ?
+                                    JSON.parse( localStorage.getItem("topten") ) :
+                                    [];                                
+                topten.push( {"date":today(), "name":name, "bonus":bonus} );
+                topten.sort( compare );
+                topten.reverse();                
+                if(topten.length >= 11){ //max 10 items
+                    topten.pop();
+                }
+                localStorage.setItem( "topten", JSON.stringify( topten ) );                                                                      
+            }
+                          
+            function get(){               
+                return localStorage.getItem("topten") != null ?
+                                    JSON.parse( localStorage.getItem("topten") ) :
+                                    [];                                                                             
+            }
+            
+            function today(){
+                var now = new Date();
+                return now.getDate() + "." + (now.getMonth()+1) + "."  + now.getFullYear();
+            }
+            
+            function compare(a, b){
+                if (a.bonus < b.bonus)
+                    return -1;
+                if (a.bonus > b.bonus)
+                    return 1;
+                return 0;
+            }
+                                                        
+            return{
+                save: save,   
+                get: get  
+            }            
+        }
+        
+      
+        
+        DICTIONARY.errorManager = function(){
+            
+            function get(){
+                return localStorage.getItem("errors") != null ?
+                                    JSON.parse( localStorage.getItem("errors") ) :
+                                    []; 
+            }
+            
+            function add( id ){                
+                var errors =  localStorage.getItem("errors") != null ?
+                                    JSON.parse( localStorage.getItem("errors") ) :
+                                    [];                                                                                            
+                if ( errors.indexOf(id) == -1 ){
+                    errors.push(id);  
+                    localStorage.setItem( "errors", JSON.stringify(errors) ); 
+                }                                                                                                        
+            }
+            
+            function remove( id ){
+                var errors =  localStorage.getItem("errors") != null ?
+                                    JSON.parse( localStorage.getItem("errors") ) :
+                                    [];
+                var index =  errors.indexOf(id);                   
+                if ( index != -1){
+                    errors.splice(index,1);
+                    localStorage.setItem( "errors", JSON.stringify(errors) ); 
+                }               
+            }
+            
+            return{
+                get: get,
+                add: add,
+                remove: remove
+            }
+            
+        }
+        
+        DICTIONARY.setting = function(){
+            
+            function set( id ){
+                var name = $(id).attr("name"); 
+                var value = $(id).val();
+                localStorage.setItem( name, value );
+            }
+            
+            return {
+                set: set
+            }
+            
+        }
+                                
+        DICTIONARY.idx = function(){
+            var n = 0;  
+            
+            function get(){
+                return n;
+            }
+            
+            function next(){
+                (n >= ( DICTIONARY.getData().length - 1) ) ? n = 0 :  n++;               
+            }
+            
+            return {
+                next: next,
+                get: get               
+            };              
+         };  
+         
+         DICTIONARY.utils = function(){
+             
+             function shuffle(o){
+                for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+                return o;
+             }
+             
+             //0-2
+             function random(){
+                return Math.round( Math.random() * 2 );
+             };
+                                            
+             return{
+                 random: random,
+                 shuffle: shuffle             
+             }
+         }
+        
+        DICTIONARY.getData = function(){
+            return[
+               {"id":1, "tenses":["have","had","had"], "fakes":["afake1", "bfake2"]},
+               {"id":2, "tenses":["do","did","done"], "fakes":["efake1", "ffake2"]},
+               {"id":3, "tenses":["set","set","set"], "fakes":["sett", "sed"]},
+               {"id":4, "tenses":["shut","shut","shut"], "fakes":["sutt", "sud"]},
+               {"id":5, "tenses":["be","were","been"], "fakes":["ifake1", "jfake2"]}               
+            ];                       
+        }
+        
+        $(document).ready(function(){         
+            DICTIONARY.game.init();
         });
-        
-        function createTopTenList(){
-            dictionary.checkResults();
-            $("#toptenList").empty();
-            var keys = dictionary.getSortedKeys();   
-            var results = JSON.parse( localStorage.getItem("results") );
-            for (i=0; i<=keys.length-1; i++){		
-                var bonus =  keys[i];
-		var name = results[bonus];             
-                $("#toptenList").append("<div>" + name + " "+  bonus + "</div>");
-             } 
-        }
-        
-        function saveResult(){
-            var bonus = $(".bonus:first").text();
-            var name = $("#name").attr("value");
-            dictionary.saveResults( bonus, name );   
-            createTopTenList();
-            $.mobile.changePage("#topten");
-        }
-        
-       function setOption( id ){
-           var name = $(id).attr("name"); 
-           var value = $(id).val();
-           localStorage.setItem( name, value );
-       }
-                     
+                             
     </script>	
 			
 </head> 
@@ -187,7 +393,7 @@
     
  <div data-role="page" data-theme="b" id="home">
      
-      <div data-role="header" data-position="fixed">            
+    <div data-role="header" data-position="fixed">            
             <h1>Home</h1>					           
     </div><!-- /header -->
 
@@ -215,15 +421,35 @@
     </div><!-- /header -->
 
     <div data-role="content" >	
-	          
-        <div id="toptenList"></div>       
-        	
+        
+        <ol id="toptenList" data-role="listview" data-theme="c"  data-count-theme="b"></ol>    	                           	
+        
     </div><!-- /content -->
 
    <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true">                                                                            
     </div><!-- /footer -->
         
  </div> <!-- /result -->
+ 
+  <div data-role="page" data-theme="b" id="search">
+     
+      <div data-role="header" data-position="fixed">                  
+            <a href="#home" onclick="window.location.href='index.html'" data-role="button" data-icon="home" data-iconpos="notext" title="home">Home</a> 
+            <h1>Search</h1>					           
+    </div><!-- /header -->
+
+    <div data-role="content" >	
+        
+        <ul id="verbsList" data-role="listview" data-filter="true" data-filter-placeholder="Search verb" data-filter-theme="b"></ul>   
+        
+    </div><!-- /content -->
+
+   <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true">                                                                            
+    </div><!-- /footer -->
+        
+ </div> <!-- /search -->
+ 
+ 
   
 <div data-role="page" data-theme="b" id="game">
 
@@ -235,16 +461,16 @@
     <div data-role="content" >	
 	  
         <div class="tenses">
-            <div id="tense0" ondragover="return false" ondrop="return drop(event)" ></div>
-            <div id="tense1" ondragover="return false" ondrop="return drop(event)" ></div>
-            <div id="tense2" ondragover="return false" ondrop="return drop(event)" ></div>
+            <div id="tense0" ondragover="return false"></div>
+            <div id="tense1" ondragover="return false"></div>
+            <div id="tense2" ondragover="return false"></div>
         </div>
 
         <div class="options"></div>
                                
         <div class="ui-grid-a" >
             <div class="ui-block-a"><button type="button" data-theme="c" data-icon="info" data-iconpos="right" title="Speech">Sound</button></div>
-            <div class="ui-block-b"><div id="nextButton"><button type="button" data-theme="b" onclick="nextVerb()" data-icon="arrow-r" data-iconpos="right" title="Next"  >Next</button></div></div>	   
+            <div class="ui-block-b"><div id="nextButton"><button type="button" data-theme="b" data-icon="arrow-r" data-iconpos="right" title="Next" >Next</button></div></div>	   
         </div>                        
 	
     </div><!-- /content -->
@@ -277,7 +503,7 @@
          
                 <div class="ui-grid-a">
                     <div class="ui-block-a"><button type="button" data-theme="c" onclick="window.location.href='index.html'">Cancel</button></div>
-                    <div class="ui-block-b"><button onclick="saveResult();" type="button" data-theme="b">Save</button></div>	   
+                    <div class="ui-block-b"><button id="saveResultsButton" type="button" data-theme="b">Save</button></div>	   
                 </div>
         </div> 
                 	
@@ -299,7 +525,7 @@
         
          <div data-role="fieldcontain">
             <label for="select-lives" class="select">Count of lives:</label>
-            <select name="lives" id="select-lives" data-native-menu="false" onchange="setOption( this );">
+            <select name="lives" id="select-lives" data-native-menu="false" >
                 <option value="3">3 lives</option>  
                 <option value="2">2 lives</option>
                 <option value="1">1 live</option>                                                                         
@@ -308,7 +534,7 @@
                                                 
         <div data-role="fieldcontain">
             <label for="select-verbs" class="select">Count of verbs:</label>
-            <select name="countOfVerbs" id="select-verbs" data-native-menu="false" onchange="setOption( this );">                    
+            <select name="countOfVerbs" id="select-verbs" data-native-menu="false" >                    
                     <option value="10">10 verbs</option>
                     <option value="20">20 verbs</option>
                     <option value="30">30 verbs</option>
