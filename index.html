@@ -44,26 +44,45 @@
             var setting;
             var topten;
             var errorManager;
+            var sound = new Audio();
             var lives = localStorage.getItem("lives") != null ? localStorage.getItem("lives") : 3;
-            var countOfVerbs = localStorage.getItem("countOfVerbs") != null ? localStorage.getItem("countOfVerbs") : 10;        
+            var countOfVerbs = localStorage.getItem("countOfVerbs") != null ? localStorage.getItem("countOfVerbs") : 10;     
+            var voice = localStorage.getItem("voice") != null ? localStorage.getItem("voice") : 'on';  
             var bonus = 0;
             
-            function init(){
+            function init(){             
+                //localStorage.clear();
                 jQuery.event.props.push('dataTransfer');
                 utils = DICTIONARY.utils();
-                data = utils.shuffle( DICTIONARY.getData() );
-                setting = DICTIONARY.setting();
-                topten = DICTIONARY.topten();
                 errorManager = DICTIONARY.errorManager();
+                data = getData();             
+                setting = DICTIONARY.setting();
+                topten = DICTIONARY.topten();                
                 idx = DICTIONARY.idx();   
-                tenses = DICTIONARY.tenses();           
+                tenses = DICTIONARY.tenses();                           
                 showTense();
                 showOptions();
                 bindEvents();
                 showStatus();
                 showTopTen();
                 showVerbsList();
-                showSetting();
+                showSetting();                                
+            }
+            
+            function getData(){
+                var data = utils.shuffle( DICTIONARY.data().get() );
+                var errors = errorManager.get();
+                               
+                //errors from last game first
+                for(var i=0; i < errors.length; i++){                                                                           
+                    var indx = utils.hasObject( data, errors[i] );                   
+                    var verb = data[indx];                                                         
+                    data.splice(indx,1);
+                    data.push(verb);                    
+                }
+                
+                data.reverse();                
+                return data;
             }
                                                            
             function getVerb(){
@@ -93,7 +112,7 @@
                 var tense = getVerb().tenses[random];
                 var selector = "#tense" + random;
                 $( selector ).text( tense );
-                $( selector ).attr("ondragover", "return true");
+                $( selector ).attr("ondragover", "return true");                
             }                                                                      
             
             function showOptions(){
@@ -106,6 +125,11 @@
                     event.dataTransfer.setData("text",  $(event.target).text() );                     
                     return true;                                        
                 });                                            
+            }
+                                 
+            function playSound(){
+                sound.setAttribute("src", getVerb().sound  );;
+                sound.play();
             }
             
             function switchNextButton(){
@@ -124,7 +148,8 @@
             
             function showSetting(){
                 $("#select-lives").val( lives );
-                $("#select-verbs").val( countOfVerbs );                
+                $("#select-verbs").val( countOfVerbs );  
+                $("#select-voice").val( voice ); 
             }
             
             function showTopTen(){                 
@@ -140,7 +165,7 @@
             
             function showVerbsList(){
                 $("#verbsList").empty();
-                var verbs = DICTIONARY.getData();
+                var verbs = DICTIONARY.data().get();
                 var head;
                 for(var i=0; i < verbs.length; i++){
                                                         
@@ -182,20 +207,25 @@
                             var isError = tenses.check( getVerb() );
                             if(isError){
                                 lives--;
-                                errorManager.add(  getVerb().id );
+                                errorManager.add(  getVerb() );
                             }else{
                                 bonus++;
-                                errorManager.remove( getVerb().id );
+                                errorManager.remove( getVerb() );
                             }                                                       
                             showStatus();
                             switchNextButton();
+                            if(voice == 'on'){
+                                playSound();
+                            }                            
                     }                       
                 });     
                 
                 $('#nextButton').click( function(){nextVerb()} );
+                $("#soundButton").click(function(){ playSound();});
                 
                 $('#select-lives').change( function(event){ setting.set( event.target ); } );
-                $('#select-verbs').change( function(event){ setting.set( event.target ); } );       
+                $('#select-verbs').change( function(event){ setting.set( event.target ); } );  
+                $('#select-voice').change( function(event){ setting.set( event.target ); } );   
                 
                 $('#saveResultsButton').click( function(){ 
                     topten.save( bonus, $("#name").val() ); 
@@ -283,10 +313,10 @@
                 get: get  
             }            
         }
-        
-      
-        
+                      
         DICTIONARY.errorManager = function(){
+            
+            var utils = DICTIONARY.utils();
             
             function get(){
                 return localStorage.getItem("errors") != null ?
@@ -294,21 +324,23 @@
                                     []; 
             }
             
-            function add( id ){                
+            function add( verb ){                
                 var errors =  localStorage.getItem("errors") != null ?
                                     JSON.parse( localStorage.getItem("errors") ) :
                                     [];                                                                                            
-                if ( errors.indexOf(id) == -1 ){
-                    errors.push(id);  
+               
+               var index = utils.hasObject( errors, verb ); 
+               if ( index == -1 ){                    
+                    errors.push(verb);  
                     localStorage.setItem( "errors", JSON.stringify(errors) ); 
                 }                                                                                                        
             }
             
-            function remove( id ){
+            function remove( verb ){
                 var errors =  localStorage.getItem("errors") != null ?
                                     JSON.parse( localStorage.getItem("errors") ) :
                                     [];
-                var index =  errors.indexOf(id);                   
+                var index = utils.hasObject( errors, verb );                   
                 if ( index != -1){
                     errors.splice(index,1);
                     localStorage.setItem( "errors", JSON.stringify(errors) ); 
@@ -345,7 +377,7 @@
             }
             
             function next(){
-                (n >= ( DICTIONARY.getData().length - 1) ) ? n = 0 :  n++;               
+                (n >= ( DICTIONARY.data().get().length - 1) ) ? n = 0 :  n++;               
             }
             
             return {
@@ -365,21 +397,48 @@
              function random(){
                 return Math.round( Math.random() * 2 );
              };
+                         
+             //return index or -1 (the same as indexOf)
+             function hasObject( data, obj ){
+                 
+                 for(key in data){
+                    if(data[key].id == obj.id)
+                        return key;
+                 }
+                 
+                 return -1;
+             }
                                             
              return{
                  random: random,
-                 shuffle: shuffle             
+                 shuffle: shuffle,
+                 hasObject: hasObject
              }
          }
         
-        DICTIONARY.getData = function(){
-            return[
-               {"id":1, "tenses":["have","had","had"], "fakes":["afake1", "bfake2"]},
-               {"id":2, "tenses":["do","did","done"], "fakes":["efake1", "ffake2"]},
-               {"id":3, "tenses":["set","set","set"], "fakes":["sett", "sed"]},
-               {"id":4, "tenses":["shut","shut","shut"], "fakes":["sutt", "sud"]},
-               {"id":5, "tenses":["be","were","been"], "fakes":["ifake1", "jfake2"]}               
-            ];                       
+        DICTIONARY.data = function(){
+                        
+            function get(){   
+                var data = [
+                   {"id":1, "tenses":["have","had","had"], "fakes":["afake1", "bfake2"], "sound":"data/have.mp3"},
+                   {"id":2, "tenses":["do","did","done"], "fakes":["efake1", "ffake2"], "sound":"data/have.mp3"},
+                   {"id":3, "tenses":["set","set","set"], "fakes":["sett", "sed"], "sound":"data/set.mp3"},
+                   {"id":4, "tenses":["shut","shut","shut"], "fakes":["sutt", "sud"], "sound":"data/have.mp3"},
+                   {"id":5, "tenses":["be","were","been"], "fakes":["ifake1", "jfake2"], "sound":"data/have.mp3"}               
+                ]; 
+                
+                return data;
+            }
+                             
+            return{
+                get: get
+            }
+        }
+        
+        
+        function playSound(){
+            var snd = new Audio("data/have.mp3");
+            snd.play();
         }
         
         $(document).ready(function(){         
@@ -402,8 +461,8 @@
             <a href="#game" data-role="button" >Game</a>            
             <a href="#topten" data-role="button">Top ten</a>
             <a href="#search" data-role="button" >Search</a> 
-            <a href="#about" data-role="button">About</a>           
-        	
+            <a href="#about" data-role="button">About</a>     
+                                            	
     </div><!-- /content -->
 
    <div data-role="footer" data-position="fixed"  class="ui-bar">         
@@ -469,10 +528,9 @@
         <div class="options"></div>
                                
         <div class="ui-grid-a" >
-            <div class="ui-block-a"><button type="button" data-theme="c" data-icon="info" data-iconpos="right" title="Speech">Sound</button></div>
+            <div class="ui-block-a"><button id="soundButton" type="button" data-theme="c" data-icon="info" data-iconpos="right" title="Sound">Sound</button></div>
             <div class="ui-block-b"><div id="nextButton"><button type="button" data-theme="b" data-icon="arrow-r" data-iconpos="right" title="Next" >Next</button></div></div>	   
-        </div>                        
-	
+        </div>                 	
     </div><!-- /content -->
 
     <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true">        
@@ -543,6 +601,17 @@
                     <option value="100">100 verbs</option>
             </select>
         </div>
+        
+        <div data-role="fieldcontain">
+                <label for="select-voice">Play sound:</label>
+                <select name="voice" id="select-voice" data-role="slider">
+                    <option value="on">On</option>
+                    <option value="off">Off</option>                        
+                </select> 
+        </div>
+
+        
+        
                	                                        
     </div><!-- /content -->
 
