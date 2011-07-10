@@ -1,0 +1,19 @@
+ .tenses div{
+    width:20%;
+    height:5em;
+    background:green;
+    margin-bottom:1em;
+}
+
+.options div{
+    width:10%;
+    height:2em;
+    background:yellow;
+    margin-bottom:1em;
+}
+
+.center{text-align: center;}
+
+#nextButton{                                           
+   display:none;
+}
