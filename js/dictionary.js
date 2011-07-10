@@ -72,22 +72,31 @@ DICTIONARY.game = (function(){
             
             function showTense(){
                 tenses.unlock();
+                
+                for(var i = 0; i<3;i++){
+                    $("#tense"+i).css('font-weight', 'normal');
+                }
+                
                 var random = utils.random();
                 var tense = getVerb().tenses[random];
                 var selector = "#tense" + random;
                 $( selector ).text( tense );
                 $( selector ).attr("ondragover", "return true");                
+                $( selector ).css('font-weight', 'bold');
+                $( selector ).removeClass('chestOpen');
+                $( selector ).addClass('chestClose');
             }                                                                      
             
             function showOptions(){
                 $('.options').empty();
                 var options = getOptions();
                 for(var i = 0; i <= ( options.length - 1 ); i++){                              
-                    $('.options').append('<div draggable="true" >' + options[i] + '</div>');                                                                             
+                    $('.options').append('<li id="opti' + i  + '" draggable="true" >' + options[i] + '</li>');                                                                             
                 }
-                $('.options div').bind('dragstart', function(event){
-                    event.dataTransfer.setData("text",  $(event.target).text() );                     
-                    return true;                                        
+                $('.options li').bind('dragstart', function(event){
+                    event.dataTransfer.effectAllowed = 'copy';
+                    //event.dataTransfer.setData("text",  $(event.target).text() );   
+                    event.dataTransfer.setData("text",  this.id );                                                         
                 });                                            
             }
                                  
@@ -97,17 +106,24 @@ DICTIONARY.game = (function(){
             }
             
             function switchNextButton(){
-                if (  $("#nextButton").is(':hidden') ){            
-                    $("#nextButton").show();
-                }else{
-                    $("#nextButton").hide();              
-                }                  
+                if (  $("#nextButton button").is(':disabled') ){                         
+                    $("#nextButton button").button("enable");                   
+                }else{                 
+                    $("#nextButton button").button("disable");    
+                }                                                                                  
             }
             
             function showStatus(){                      
                 $(".bonus").text( bonus );
-                $(".lives").text( lives ); 
+                showLives();              
                 checkStatus();
+            }
+            
+            function showLives(){
+                $('.lives').empty();
+                for (var i = 1; i<= lives; i++){
+                 $('.lives').append('<img src="img/live.png" alt="live" /> ');   
+                }                                
             }
             
             function showSetting(){
@@ -161,8 +177,15 @@ DICTIONARY.game = (function(){
             function bindEvents(){      
                 $('.tenses div').bind('drop', function(event){
                     event.stopPropagation();
-                    event.preventDefault();
-                    var text = event.dataTransfer.getData("text");                   
+                    event.preventDefault();                    
+                    var id = event.dataTransfer.getData("text"); 
+                    var text = $('#' + id).text();
+                    
+                    if (  $(event.target).text() != "" ){
+                        $('ul.options li').show();
+                    }                                        
+                    $('#' + id).hide();
+                    
                     $(event.target).text(text);  
                     if ($("#tense0").text() && 
                         $("#tense1").text() && 

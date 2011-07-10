@@ -8,12 +8,12 @@
                 
         <script src="js/jquery/jquery-ui-1.8.13.bounceEffect.min.js"></script>
                 
-        <!-- kibo -->  
-        <link rel="stylesheet" href="css/main.css" />
+        <!-- kibo -->         
+        <link rel="stylesheet" href="css/main.css" />        
         <script src="js/dictionary.js"></script>
        			
     <script>                                           
-        $(document).ready(function(){         
+        $(document).ready(function(){              
             DICTIONARY.game.init();
         });                             
     </script>	
@@ -27,7 +27,11 @@
             <h1>Home</h1>					           
     </div><!-- /header -->
 
-    <div data-role="content" >	
+    <div data-role="content" >	                
+        <h2 class="center shadowText">Irregular verbs</h2>
+        <p class="center">
+            <img id="logo" src="img/happy.png" alt="logo" />
+        </p>
 	                         
             <a href="#game" data-role="button" >Game</a>            
             <a href="#topten" data-role="button">Top ten</a>
@@ -41,8 +45,7 @@
     </div><!-- /footer -->
         
  </div> <!-- /home -->
- 
- 
+  
   <div data-role="page" data-theme="b" id="topten">
      
       <div data-role="header" data-position="fixed"> 
@@ -78,9 +81,7 @@
     </div><!-- /footer -->
         
  </div> <!-- /search -->
- 
- 
-  
+    
 <div data-role="page" data-theme="b" id="game">
 
     <div data-role="header" data-position="fixed">
@@ -89,25 +90,28 @@
     </div><!-- /header -->
 
     <div data-role="content" >	
-	  
-        <div class="tenses">
-            <div id="tense0" ondragover="return false"></div>
-            <div id="tense1" ondragover="return false"></div>
-            <div id="tense2" ondragover="return false"></div>
-        </div>
-
-        <div class="options"></div>
-                               
+        
+        
+        <div class="ui-grid-b tenses">
+            <div id="tense0" class="ui-block-a chestOpen" ondragover="return false"></div>
+            <div id="tense1" class="ui-block-b chestOpen" ondragover="return false"></div>
+            <div id="tense2" class="ui-block-c chestOpen" ondragover="return false"></div>
+        </div><!-- /grid-b -->
+	        
+        <ul class="options box"></ul>
+                                             
         <div class="ui-grid-a" >
             <div class="ui-block-a"><button id="soundButton" type="button" data-theme="c" data-icon="info" data-iconpos="right" title="Sound">Sound</button></div>
-            <div class="ui-block-b"><div id="nextButton"><button type="button" data-theme="b" data-icon="arrow-r" data-iconpos="right" title="Next" >Next</button></div></div>	   
+            <div class="ui-block-b"><div id="nextButton"><button type="button" data-theme="b" data-icon="arrow-r" data-iconpos="right" title="Next" disabled="disabled">Next</button></div></div>	   
         </div>                 	
     </div><!-- /content -->
 
-    <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true">        
+    <div id="gameFooter" data-role="footer" data-position="fixed" class="ui-bar" >        
         <div class="ui-grid-a">
-            <div class="ui-block-a"><span class="bonus" ></span></div>
-            <div class="ui-block-b"><span class="lives"></span></div>	   
+            <div class="ui-block-a">
+                <div class="bonus"></div>                
+            </div>
+            <div class="ui-block-b"><div class="lives center" ></div></div>	   
         </div>                                                               
     </div><!-- /footer -->
 
@@ -123,11 +127,11 @@
 
     <div data-role="content" >	
 	         
-        <h2 id="state" class="center"></h2>
-        <h4 class="bonus center"></h4>
+        <h2 id="state" class="center shadowText"></h2>
+        <h4 class="bonus"></h4>
                                       
         <div data-role="fieldcontain">            
-        	<label for="name">Name:</label>
+        	<label for="name"><b>Your name</b></label>
                 <input type="text" name="name" id="name" value="" placeholder="your name"  />                  
          
                 <div class="ui-grid-a">
@@ -153,7 +157,7 @@
     <div data-role="content" >
         
          <div data-role="fieldcontain">
-            <label for="select-lives" class="select">Count of lives:</label>
+            <label for="select-lives"><b>Count of lives</b></label>
             <select name="lives" id="select-lives" data-native-menu="false" >
                 <option value="3">3 lives</option>  
                 <option value="2">2 lives</option>
@@ -162,7 +166,7 @@
         </div>
                                                 
         <div data-role="fieldcontain">
-            <label for="select-verbs" class="select">Count of verbs:</label>
+            <label for="select-verbs" ><b>Count of verbs</b></label>
             <select name="countOfVerbs" id="select-verbs" data-native-menu="false" >                    
                     <option value="10">10 verbs</option>
                     <option value="20">20 verbs</option>
@@ -174,7 +178,7 @@
         </div>
         
         <div data-role="fieldcontain">
-                <label for="select-voice">Play sound:</label>
+                <label for="select-voice"><b>Play sound</b></label>
                 <select name="voice" id="select-voice" data-role="slider">
                     <option value="on">On</option>
                     <option value="off">Off</option>                        
