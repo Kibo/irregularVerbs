@@ -53,11 +53,19 @@ DICTIONARY.game = (function(){
                 return data[ idx.get() ];
             }
             
-            function nextVerb(){
+            function nextVerb(){                                              
                 idx.next();
+                chestOpen();
                 showTense(); 
                 showOptions();
-                switchNextButton();
+                switchNextButton();                                               
+            }
+            
+            function chestOpen(){
+                for(var i = 0; i <= 2; i++){
+                    $( '#tense'+i ).removeClass('chestClose');
+                    $( '#tense'+i ).addClass('chestOpen');
+                 }                
             }
                                    
             function getOptions(){
@@ -186,6 +194,9 @@ DICTIONARY.game = (function(){
                     }                                        
                     $('#' + id).hide();
                     
+                    $(event.target).removeClass('chestOpen');
+                    $(event.target).addClass('chestClose');
+                                        
                     $(event.target).text(text);  
                     if ($("#tense0").text() && 
                         $("#tense1").text() && 

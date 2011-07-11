@@ -21,26 +21,26 @@
 }
 
 .tenses{
-    margin:2em 0;
+    margin:2em 0;    
 }
 
 .tenses div{   
     text-align: center;
     height: 5em;
     margin:0;
-    padding:0;        
+    padding:0;     
 }
 
 .chestClose{
-    background:transparent url(../img/chestClose.png) no-repeat 0 0;  
-    -webkit-background-size: auto 80% ; 
+    background:transparent url(../img/chestClose.png) no-repeat 50% 100%;  
+    -webkit-background-size: auto 73% ; 
+    
 }
 
 .chestOpen{
-    background:transparent url(../img/chestOpen.png) no-repeat 0 0;  
-    -webkit-background-size: auto 90% ;     
+    background:transparent url(../img/chestOpen.png) no-repeat 50% 100%;  
+    -webkit-background-size: auto 95% ;     
 }
-
 
 
 #gameFooter{
@@ -50,20 +50,23 @@
 
 .bonus{
     background:transparent url(../img/coin.png) no-repeat 5px 4px;
-    padding-left:2.5em;        
+    padding-left:3em;    
+    -webkit-background-size: auto 80% ;  
 }
 
 h4.bonus{
     text-align: center;
-    background-position: 50% 4px;
-    line-height: 3em;
+    -webkit-background-size: auto 95% ;  
+    background-position: 15% 4px;
+    line-height: 8em;
     margin:0;padding:0;
-    padding-left:2.5em;
+    padding-left:3em;
     margin-top:2em;
 }
 
 .lives img{
     vertical-align:middle;
+    vertical-align:text-bottom;
 }
 
 /*  tools */
@@ -72,9 +75,12 @@ h4.bonus{
  -webkit-box-shadow: 3px 3px 4px #999; 
  box-shadow: 3px 3px 4px #999; 
 } 
-
  
 .center{text-align: center;}
+
+.bold{
+    font-weight: bold;
+}
 
 
 /*  options list */
