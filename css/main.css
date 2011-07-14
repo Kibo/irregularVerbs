@@ -21,31 +21,41 @@
 }
 
 .tenses{
-    margin:2em 0;    
+    margin:1em 0 2em 0  ;    
 }
 
 .tenses div{   
     text-align: center;
-    height: 5em;
+    height: 7em;    
     margin:0;
     padding:0;     
+    font-weight: bold;
 }
 
 .chestClose{
     background:transparent url(../img/chestClose.png) no-repeat 50% 100%;  
-    -webkit-background-size: auto 73% ; 
-    
+    -webkit-background-size: 70% auto ;    
+    max-width: 150%;
 }
 
 .chestOpen{
     background:transparent url(../img/chestOpen.png) no-repeat 50% 100%;  
-    -webkit-background-size: auto 95% ;     
+    -webkit-background-size: 90% auto;     
 }
 
+.chestRat{
+    background:transparent url(../img/rat.png) no-repeat 50% 100%;  
+    -webkit-background-size: 90% auto; 
+}
+
+.chestGold{
+    background:transparent url(../img/coin.png) no-repeat 50% 100%;  
+    -webkit-background-size: 90% auto; 
+}
 
 #gameFooter{
     margin:0;;
-    line-height: 3em;
+    line-height: 3em;       
 }
 
 .bonus{
@@ -69,6 +79,33 @@ h4.bonus{
     vertical-align:text-bottom;
 }
 
+.options > div > div{
+    line-height:3em;   
+    padding-top:0.5em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.key0{
+     background:transparent url(../img/key0.png) no-repeat 50% 0; 
+    -webkit-background-size: 90% auto ;     
+}
+
+.key1{
+     background:transparent url(../img/key1.png) no-repeat 50% 0; 
+    -webkit-background-size: 90% auto;   
+}
+
+.key2{
+     background:transparent url(../img/key2.png) no-repeat 50% 0; 
+    -webkit-background-size: 90% auto ;      
+}
+
+.key3{
+     background:transparent url(../img/key3.png) no-repeat 50% 0; 
+    -webkit-background-size: 90% auto ;      
+}
+
 /*  tools */
 .dropshadow {
  -moz-box-shadow: 3px 3px 4px #999; 
@@ -84,53 +121,5 @@ h4.bonus{
 
 
 /*  options list */
-ul.box {
-position: relative;
-z-index: 1; /* prevent shadows falling behind containers with backgrounds */
-overflow: hidden;
-list-style: none;
-margin: 0;
-padding: 0; }
 
-ul.box li {
-position: relative;
-float: left;
-padding: 1em;
-border: 1px solid #efefef;
-margin: 0 10px 10px 0;
-background: #fff;
--webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.27), 0 0 40px rgba(0, 0, 0, 0.06) inset;
--moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.27), 0 0 40px rgba(0, 0, 0, 0.06) inset;
-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.27), 0 0 40px rgba(0, 0, 0, 0.06) inset; 
-cursor:pointer;
-}
-
-ul.box li:before,
-ul.box li:after {
-content: '';
-z-index: -1;
-position: absolute;
-left: 10px;
-bottom: 10px;
-width: 70%;
-max-width: 300px; /* avoid rotation causing ugly appearance at large container widths */
-height: 55%;
--webkit-box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
--moz-box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
--webkit-transform: skew(-15deg) rotate(-6deg);
--moz-transform: skew(-15deg) rotate(-6deg);
--ms-transform: skew(-15deg) rotate(-6deg);
--o-transform: skew(-15deg) rotate(-6deg);
-transform: skew(-15deg) rotate(-6deg); }
-
-
-ul.box li:after {
-left: auto;
-right: 10px;
--webkit-transform: skew(15deg) rotate(6deg);
--moz-transform: skew(15deg) rotate(6deg);
--ms-transform: skew(15deg) rotate(6deg);
--o-transform: skew(15deg) rotate(6deg);
-transform: skew(15deg) rotate(6deg); }
 

@@ -13,6 +13,7 @@ DICTIONARY.game = (function(){
             var countOfVerbs = localStorage.getItem("countOfVerbs") != null ? localStorage.getItem("countOfVerbs") : 10;     
             var voice = localStorage.getItem("voice") != null ? localStorage.getItem("voice") : 'on';  
             var bonus = 0;
+            var random;
             
             function init(){             
                 //localStorage.clear();
@@ -55,57 +56,61 @@ DICTIONARY.game = (function(){
             
             function nextVerb(){                                              
                 idx.next();
-                chestOpen();
+                setChest();
                 showTense(); 
                 showOptions();
                 switchNextButton();                                               
             }
             
-            function chestOpen(){
-                for(var i = 0; i <= 2; i++){
-                    $( '#tense'+i ).removeClass('chestClose');
-                    $( '#tense'+i ).addClass('chestOpen');
+            function setChest(){
+                for(var i = 0; i <= 2; i++){                  
+                    $( '#tense'+i ).removeClass('chestRat');                
+                    $( '#tense'+i ).removeClass('chestGold');                                                          
+                    $( '#tense'+i ).addClass('chestClose');                
                  }                
             }
                                    
-            function getOptions(){
-                var options = [ getVerb().tenses[0],
-                                getVerb().tenses[1],
-                                getVerb().tenses[2],
+            function getOptions(){               
+                var options = [ 
                                 getVerb().fakes[0],
-                                getVerb().fakes[1] 
+                                getVerb().fakes[1]                               
                              ];
+                
+                //random is generated in showTenses(); determine index of helpVerbs
+                for (var i = 0; i < getVerb().tenses.length; i++){                    
+                    if(random != i){
+                        options.push( getVerb().tenses[i] );
+                    }                                        
+                }               
                 return utils.shuffle( options );                             
             }
             
             function showTense(){
-                tenses.unlock();
-                
-                for(var i = 0; i<3;i++){
-                    $("#tense"+i).css('font-weight', 'normal');
-                }
-                
-                var random = utils.random();
+                tenses.unlock();                                             
+                random = utils.random();
                 var tense = getVerb().tenses[random];
-                var selector = "#tense" + random;
-                $( selector ).text( tense );
-                $( selector ).attr("ondragover", "return true");                
-                $( selector ).css('font-weight', 'bold');
-                $( selector ).removeClass('chestOpen');
-                $( selector ).addClass('chestClose');
+                var sel = "#tense" + random;
+                $( sel ).text( tense );
+                $( sel ).attr("ondragover", "return true");                                               
+                $( sel ).removeClass('chestClose');
+                //$( sel ).addClass('chestOpen');
             }                                                                      
             
-            function showOptions(){
-                $('.options').empty();
+            function showOptions(){               
                 var options = getOptions();
-                for(var i = 0; i <= ( options.length - 1 ); i++){                              
-                    $('.options').append('<li id="opti' + i  + '" draggable="true" >' + options[i] + '</li>');                                                                             
-                }
-                $('.options li').bind('dragstart', function(event){
-                    event.dataTransfer.effectAllowed = 'copy';
-                    //event.dataTransfer.setData("text",  $(event.target).text() );   
-                    event.dataTransfer.setData("text",  this.id );                                                         
-                });                                            
+                for(var i = 0; i <= ( options.length - 1 ); i++){     
+                    $('#opti' + i).text(options[i]);
+                    $('#opti' + i).attr('draggable', true);  
+                    $('#opti' + i).removeAttr('class');  
+                    $('#opti' + i).addClass('key' + ((random + i)%4) );                   
+                    
+                    $('#opti' + i).bind('dragstart', function(event){
+                        event.dataTransfer.effectAllowed = 'copy';                
+                        event.dataTransfer.setData("text",  this.id );                                                         
+                    }); 
+                    
+                    $('#opti' + i).show();
+                }                                                           
             }
                                  
             function playSound(pathToFile){
@@ -188,29 +193,29 @@ DICTIONARY.game = (function(){
                     event.preventDefault();                    
                     var id = event.dataTransfer.getData("text"); 
                     var text = $('#' + id).text();
-                    
-                    if (  $(event.target).text() != "" ){
-                        $('ul.options li').show();
-                    }                                        
+                                                                                                 
                     $('#' + id).hide();
-                    
-                    $(event.target).removeClass('chestOpen');
-                    $(event.target).addClass('chestClose');
-                                        
+                                                           
                     $(event.target).text(text);  
+                    $(event.target).removeClass('chestClose');
+                                                    
+                    var isError = tenses.check( getVerb(), getIndex( $(event.target).attr('id') ) );                    
+                    if(isError){
+                        lives--;                        
+                        $(event.target).addClass('chestRat');
+                        errorManager.add(  getVerb() );
+                    }else{
+                        bonus++;
+                        $(event.target).addClass('chestGold');
+                        errorManager.remove( getVerb() );
+                    }
+                    tenses.lock( $(event.target).attr('id') )
+                    showStatus();
+                    
                     if ($("#tense0").text() && 
                         $("#tense1").text() && 
                         $("#tense2").text() ){
-                            tenses.lock();
-                            var isError = tenses.check( getVerb() );
-                            if(isError){
-                                lives--;
-                                errorManager.add(  getVerb() );
-                            }else{
-                                bonus++;
-                                errorManager.remove( getVerb() );
-                            }                                                       
-                            showStatus();
+                            //tenses.lock();                                                                                                          
                             switchNextButton();
                             if(voice == 'on'){
                                 playSound( getVerb().sound );
@@ -235,6 +240,10 @@ DICTIONARY.game = (function(){
                     playSound($(event.target).attr("data-voice"));
                 });
             }
+            
+            function getIndex( idTense ){               
+                return idTense.substring(idTense.length-1, idTense.length); 
+            }
                                                           
             return{
                 init: init 
@@ -244,10 +253,8 @@ DICTIONARY.game = (function(){
         
         DICTIONARY.tenses = function(){
         
-            function lock(){
-                for(var i = 0; i<=2; i++){               
-                    $("#tense" + i).attr("ondragover", "return true");
-                }
+            function lock( idTense ){                           
+                $("#" + idTense).attr("ondragover", "return true");                
             }
             
            function unlock(){
@@ -256,23 +263,19 @@ DICTIONARY.game = (function(){
                    $("#tense" + i).attr("ondragover", "return false");
                }           
             }
-            
-           function check( verb ){              
+                                   
+           function check( verb, index ){                                                     
                 var isError = false;
-                for(var i = 0; i<=2; i++){                 
-                    if( $("#tense" + i).text() != verb.tenses[i] ){
-                        isError = true;
-                        $("#tense" + i ).effect("bounce", { times:3 }, 200);                
-                    }                  
-                } 
-                
-                return isError;                          
+                if( $('#tense'+index).text() != verb.tenses[index] ){                 
+                    isError = true;
+                }
+                return isError;                
             }
             
             return{
                 lock: lock,
                 check: check,
-                unlock: unlock
+                unlock: unlock               
             }                                
         } 
         
