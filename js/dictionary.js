@@ -93,7 +93,7 @@ DICTIONARY.game = (function(){
                 $( sel ).text( tense );
                 $( sel ).attr("ondragover", "return true");                                               
                 $( sel ).removeClass('chestClose');
-                //$( sel ).addClass('chestOpen');
+                //$( sel ).addClass('chestOpen');            
             }                                                                      
             
             function showOptions(){               
@@ -187,41 +187,43 @@ DICTIONARY.game = (function(){
                }           
             }
             
-            function bindEvents(){      
-                $('.tenses div').bind('drop', function(event){
-                    event.stopPropagation();
-                    event.preventDefault();                    
-                    var id = event.dataTransfer.getData("text"); 
-                    var text = $('#' + id).text();
-                                                                                                 
-                    $('#' + id).hide();
-                                                           
-                    $(event.target).text(text);  
-                    $(event.target).removeClass('chestClose');
-                                                    
-                    var isError = tenses.check( getVerb(), getIndex( $(event.target).attr('id') ) );                    
-                    if(isError){
-                        lives--;                        
-                        $(event.target).addClass('chestRat');
-                        errorManager.add(  getVerb() );
-                    }else{
-                        bonus++;
-                        $(event.target).addClass('chestGold');
-                        errorManager.remove( getVerb() );
-                    }
-                    tenses.lock( $(event.target).attr('id') )
-                    showStatus();
-                    
-                    if ($("#tense0").text() && 
-                        $("#tense1").text() && 
-                        $("#tense2").text() ){
-                            //tenses.lock();                                                                                                          
-                            switchNextButton();
-                            if(voice == 'on'){
-                                playSound( getVerb().sound );
-                            }                            
-                    }                       
-                });     
+            function bindEvents(){  
+                for(var i = 0; i<=2; i++){
+                    $('#tense' + i).bind('drop', function(event){
+                        event.stopPropagation();
+                        event.preventDefault();                    
+                        var id = event.dataTransfer.getData("text"); 
+                        var text = $('#' + id).text();
+
+                        $('#' + id).hide();
+
+                        $(event.target).text(text);  
+                        $(event.target).removeClass('chestClose');
+
+                        var isError = tenses.check( getVerb(), getIndex( $(event.target).attr('id') ) );                    
+                        if(isError){
+                            lives--;                        
+                            $(event.target).addClass('chestRat');
+                            errorManager.add(  getVerb() );
+                        }else{
+                            bonus++;
+                            $(event.target).addClass('chestGold');
+                            errorManager.remove( getVerb() );
+                        }
+                        tenses.lock( $(event.target).attr('id') )
+                        showStatus();
+
+                        if ($("#tense0").text() && 
+                            $("#tense1").text() && 
+                            $("#tense2").text() ){
+                                //tenses.lock();                                                                                                          
+                                switchNextButton();
+                                if(voice == 'on'){
+                                    playSound( getVerb().sound );
+                                }                            
+                        }                      
+                    });
+                } //for(var i = 0; i<=2; i++){
                 
                 $('#nextButton').click( function(){nextVerb()} );
                 $("#soundButton").click(function(){ playSound( getVerb().sound );});

@@ -24,33 +24,33 @@
     margin:1em 0 2em 0  ;    
 }
 
-.tenses div{   
+.tenses > div > div{   
     text-align: center;
     height: 7em;    
-    margin:0;
-    padding:0;     
+    margin:0 auto;
+    padding:0;    
     font-weight: bold;
+    max-width: 100px; /* --TODO- Media Queries */     
 }
 
 .chestClose{
     background:transparent url(../img/chestClose.png) no-repeat 50% 100%;  
-    -webkit-background-size: 70% auto ;    
-    max-width: 150%;
+    -webkit-background-size: 70% auto ;           
 }
 
 .chestOpen{
     background:transparent url(../img/chestOpen.png) no-repeat 50% 100%;  
-    -webkit-background-size: 90% auto;     
+    -webkit-background-size: 90% auto;         
 }
 
 .chestRat{
     background:transparent url(../img/rat.png) no-repeat 50% 100%;  
-    -webkit-background-size: 90% auto; 
+    -webkit-background-size: 90% auto;    
 }
 
 .chestGold{
     background:transparent url(../img/coin.png) no-repeat 50% 100%;  
-    -webkit-background-size: 90% auto; 
+    -webkit-background-size: 90% auto;    
 }
 
 #gameFooter{
@@ -83,7 +83,10 @@ h4.bonus{
     line-height:3em;   
     padding-top:0.5em;
     font-weight: bold;
-    text-align: center;
+    text-align: center;        
+    max-width: 100px; /* --TODO- Media Queries */     
+    margin:0 auto;
+    font-size:90%;
 }
 
 .key0{
