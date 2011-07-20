@@ -26,31 +26,76 @@
 
 .tenses > div > div{   
     text-align: center;
-    height: 7em;    
+    height: 7.5em;    
     margin:0 auto;
     padding:0;    
     font-weight: bold;
-    max-width: 100px; /* --TODO- Media Queries */     
+    max-width: 100px; /* --TODO- Media Queries */        
 }
 
-.chestClose{
-    background:transparent url(../img/chestClose.png) no-repeat 50% 100%;  
+.tenses > div > div > span{      
+    background:orange;
+    padding:0.1em 0.5em;
+}
+
+.chestCloseLeft{
+    background:transparent url(../img/chestCloseLeft.png) no-repeat 50% 100%;  
     -webkit-background-size: 70% auto ;           
 }
 
-.chestOpen{
-    background:transparent url(../img/chestOpen.png) no-repeat 50% 100%;  
-    -webkit-background-size: 90% auto;         
+.chestCloseMiddle{
+    background:transparent url(../img/chestCloseMiddle.png) no-repeat 50% 70%;  
+    -webkit-background-size: 50% auto ;           
 }
 
-.chestRat{
-    background:transparent url(../img/rat.png) no-repeat 50% 100%;  
+.chestCloseRight{
+    background:transparent url(../img/chestCloseRight.png) no-repeat 50% 100%;  
+    -webkit-background-size: 70% auto ;           
+}
+
+.chestRatLeft{
+    background:transparent url(../img/chestRatLeft.png) no-repeat 50% 100%;  
     -webkit-background-size: 90% auto;    
 }
 
-.chestGold{
-    background:transparent url(../img/coin.png) no-repeat 50% 100%;  
+.chestRatMiddle{
+    background:transparent url(../img/chestRatMiddle.png) no-repeat 50% 70%;  
+    -webkit-background-size: 50% auto ;    
+}
+
+.chestRatRight{
+    background:transparent url(../img/chestRatRight.png) no-repeat 50% 100%;  
     -webkit-background-size: 90% auto;    
+}
+
+.chestOpenLeft{
+    background:transparent url(../img/chestOpenLeft.png) no-repeat 50% 100%;  
+    -webkit-background-size: 90% auto;    
+}
+
+.chestOpenMiddle{
+    background:transparent url(../img/chestOpenMiddle.png) no-repeat 50% 70%;  
+    -webkit-background-size: 50% auto ;     
+}
+
+.chestOpenRight{
+    background:transparent url(../img/chestOpenRight.png) no-repeat 50% 100%;  
+    -webkit-background-size: 90% auto;    
+}
+
+.chestParrotLeft{
+    background:transparent url(../img/chestParrotLeft.png) no-repeat 50% 100%;  
+    -webkit-background-size: 70% auto;    
+}
+
+.chestParrotMiddle{
+    background:transparent url(../img/chestParrotMiddle.png) no-repeat 50% 70%;  
+    -webkit-background-size: 50% auto ;     
+}
+
+.chestParrotRight{
+    background:transparent url(../img/chestParrotRight.png) no-repeat 50% 100%;  
+    -webkit-background-size: 70% auto;    
 }
 
 #gameFooter{
@@ -58,10 +103,21 @@
     line-height: 3em;       
 }
 
+
+.lives{
+    
+    margin-right:1.7em;
+    text-align: right;
+    
+}
+
 .bonus{
-    background:transparent url(../img/coin.png) no-repeat 5px 4px;
+    background:transparent url(../img/bonus.png) no-repeat 5px 4px;
     padding-left:3em;    
-    -webkit-background-size: auto 80% ;  
+    padding-right:1em;
+    -webkit-background-size: auto 70% ;         
+    float:left;    
+    color:#ccc;
 }
 
 h4.bonus{
@@ -79,6 +135,10 @@ h4.bonus{
     vertical-align:text-bottom;
 }
 
+.options{
+    background:#eeeeee;
+}
+
 .options > div > div{
     line-height:3em;   
     padding-top:0.5em;
@@ -87,6 +147,7 @@ h4.bonus{
     max-width: 100px; /* --TODO- Media Queries */     
     margin:0 auto;
     font-size:90%;
+    cursor:move;
 }
 
 .key0{
@@ -109,17 +170,23 @@ h4.bonus{
     -webkit-background-size: 90% auto ;      
 }
 
+
 /*  tools */
-.dropshadow {
- -moz-box-shadow: 3px 3px 4px #999; 
- -webkit-box-shadow: 3px 3px 4px #999; 
- box-shadow: 3px 3px 4px #999; 
-} 
- 
 .center{text-align: center;}
 
 .bold{
     font-weight: bold;
+}
+
+.corner{
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+
+.shadow{
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .3);
+    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .3);
 }
 
 

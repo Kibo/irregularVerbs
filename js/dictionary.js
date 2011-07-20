@@ -63,10 +63,12 @@ DICTIONARY.game = (function(){
             }
             
             function setChest(){
-                for(var i = 0; i <= 2; i++){                  
-                    $( '#tense'+i ).removeClass('chestRat');                
-                    $( '#tense'+i ).removeClass('chestGold');                                                          
-                    $( '#tense'+i ).addClass('chestClose');                
+                for(var i = 0; i <= 2; i++){   
+                    var direction = (i == 0) ? 'Left' : (i == 1)? 'Middle' : 'Right';
+                    $( '#tense'+i ).removeClass('chestRat' + direction);                
+                    $( '#tense'+i ).removeClass('chestOpen' + direction);  
+                    $( '#tense'+i ).removeClass('chestParrot' + direction); 
+                    $( '#tense'+i ).addClass('chestClose' + direction);                
                  }                
             }
                                    
@@ -90,10 +92,12 @@ DICTIONARY.game = (function(){
                 random = utils.random();
                 var tense = getVerb().tenses[random];
                 var sel = "#tense" + random;
-                $( sel ).text( tense );
-                $( sel ).attr("ondragover", "return true");                                               
-                $( sel ).removeClass('chestClose');
-                //$( sel ).addClass('chestOpen');            
+                //$( sel ).text( tense );
+                $( sel ).append( '<span class="corner shadow">' + tense + '</span>');
+                $( sel ).attr("ondragover", "return true"); 
+                var dirrection = (random == 0) ? 'Left' : (random == 1)? 'Middle' : 'Right';                     
+                $( sel ).removeClass( 'chestClose' + dirrection );
+                $( sel ).addClass('chestParrot' + dirrection);            
             }                                                                      
             
             function showOptions(){               
@@ -106,7 +110,8 @@ DICTIONARY.game = (function(){
                     
                     $('#opti' + i).bind('dragstart', function(event){
                         event.dataTransfer.effectAllowed = 'copy';                
-                        event.dataTransfer.setData("text",  this.id );                                                         
+                        event.dataTransfer.setData("text",  this.id );    
+                        $('#opti' + i).css('cursor', 'pointer');
                     }); 
                     
                     $('#opti' + i).show();
@@ -132,11 +137,11 @@ DICTIONARY.game = (function(){
                 checkStatus();
             }
             
-            function showLives(){
+            function showLives(){                                                      
                 $('.lives').empty();
                 for (var i = 1; i<= lives; i++){
-                 $('.lives').append('<img src="img/live.png" alt="live" /> ');   
-                }                                
+                    $('.lives').append('<img src="img/skul.png" alt="live" width="30" /> ');
+                } 
             }
             
             function showSetting(){
@@ -197,17 +202,21 @@ DICTIONARY.game = (function(){
 
                         $('#' + id).hide();
 
-                        $(event.target).text(text);  
-                        $(event.target).removeClass('chestClose');
+                        //$(event.target).text(text);
+                        $(event.target).append('<span class="corner shadow">' + text + '</span>');
+                        
+                        var targetId = $(event.target).attr('id')                                                                                            
+                        var dirrection = (targetId == 'tense0') ? 'Left' : (targetId == 'tense1')? 'Middle' : 'Right';                     
+                        $(event.target).removeClass( 'chestClose' + dirrection );
 
                         var isError = tenses.check( getVerb(), getIndex( $(event.target).attr('id') ) );                    
                         if(isError){
                             lives--;                        
-                            $(event.target).addClass('chestRat');
+                            $(event.target).addClass('chestRat' + dirrection);
                             errorManager.add(  getVerb() );
                         }else{
                             bonus++;
-                            $(event.target).addClass('chestGold');
+                            $(event.target).addClass('chestOpen' + dirrection );
                             errorManager.remove( getVerb() );
                         }
                         tenses.lock( $(event.target).attr('id') )

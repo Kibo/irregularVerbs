@@ -18,9 +18,9 @@
 			
 </head> 
 <body>     
- <div data-role="page" data-theme="e" id="home">
+ <div data-role="page" data-theme="e"  id="home">
      
-    <div data-role="header" data-position="fixed" data-theme="b">            
+    <div data-role="header" data-position="fixed" data-theme="a" >            
         <h1>Home</h1>					           
     </div><!-- /header -->
 
@@ -30,14 +30,14 @@
             <img id="logo" src="img/happy.png" alt="logo" />
         </p>
 	                         
-        <a href="#game" data-role="button" data-theme="b">Game</a>            
+        <a href="#game" data-role="button" data-theme="b" >Game</a>            
         <a href="#topten" data-role="button" data-theme="b">Top ten</a>
         <a href="#search" data-role="button" data-theme="b">Search</a> 
         <a href="#about" data-role="button" data-theme="b">About</a>     
                                             	
     </div><!-- /content -->
 
-   <div data-role="footer" data-position="fixed"  class="ui-bar" data-theme="b">         
+   <div data-role="footer" data-position="fixed" class="ui-bar" data-theme="a">         
         <a href="#options" data-role="button" data-icon="gear">Options</a>                                                              
     </div><!-- /footer -->
         
@@ -79,9 +79,9 @@
         
  </div> <!-- /search -->
     
-<div data-role="page" data-theme="e" id="game">
+<div data-role="page"  id="game">
 
-    <div data-role="header" data-position="fixed" data-theme="b">
+    <div data-role="header" data-position="fixed" >
             <a href="#home" onclick="window.location.href='index.html'" data-role="button" data-icon="home" data-iconpos="notext" title="home">Home</a> 
             <h1>Game</h1>					           
     </div><!-- /header -->
@@ -90,13 +90,13 @@
                 
         <div class="ui-grid-b tenses">
             <div  class="ui-block-a" >
-                <div id="tense0" class="chestClose" ondragover="return false"></div>                       
+                <div id="tense0" class="chestCloseLeft" ondragover="return false"></div>                       
             </div>
             <div class="ui-block-b">
-                <div id="tense1" class="chestClose"  ondragover="return false"></div>                  
+                <div id="tense1" class="chestCloseMiddle"  ondragover="return false"></div>                  
             </div>
             <div class="ui-block-c">
-                <div id="tense2" class="chestClose" ondragover="return false"></div>                
+                <div id="tense2" class="chestCloseRight" ondragover="return false"></div>                
             </div>
         </div><!-- /grid-b -->
 	                                
@@ -120,16 +120,17 @@
                                              
         <div class="ui-grid-a" >
             <div class="ui-block-a"><button id="soundButton" type="button" data-theme="c" data-icon="info" data-iconpos="right" title="Sound">Sound</button></div>
-            <div class="ui-block-b"><div id="nextButton"><button type="button" data-theme="b" data-icon="arrow-r" data-iconpos="right" title="Next" disabled="disabled">Next</button></div></div>	   
+            <div class="ui-block-b"><div id="nextButton"><button type="button" data-theme="a" data-icon="arrow-r" data-iconpos="right" title="Next" disabled="disabled">Next</button></div></div>	   
         </div>                 	
     </div><!-- /content -->
       
-    <div id="gameFooter" data-role="footer" data-position="fixed" class="ui-bar" data-theme="b" >        
+    <div id="gameFooter" data-role="footer" data-position="fixed" class="ui-bar"  >    
+                       
         <div class="ui-grid-a">
             <div class="ui-block-a">
                 <div class="bonus"></div>                
             </div>
-            <div class="ui-block-b"><div class="lives center" ></div></div>	   
+            <div class="ui-block-b" ><div class="lives" ></div></div>	   
         </div>        
         
     </div><!-- /footer -->
