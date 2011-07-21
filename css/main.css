@@ -16,8 +16,8 @@
                0 20px 20px rgba(0,0,0,.15);
 }
 
-#logo{        
-    height:20%;
+#motto, #farawell{        
+    height:50%;
 }
 
 .tenses{
@@ -98,11 +98,14 @@
     -webkit-background-size: 70% auto;    
 }
 
-#gameFooter{
+#gameoverBox{
+    text-align: center;
+}
+
+.gameFooter{
     margin:0;;
     line-height: 3em;       
 }
-
 
 .lives{
     
@@ -120,24 +123,13 @@
     color:#ccc;
 }
 
-h4.bonus{
-    text-align: center;
-    -webkit-background-size: auto 95% ;  
-    background-position: 15% 4px;
-    line-height: 8em;
-    margin:0;padding:0;
-    padding-left:3em;
-    margin-top:2em;
-}
+
 
 .lives img{
     vertical-align:middle;
     vertical-align:text-bottom;
 }
 
-.options{
-    background:#eeeeee;
-}
 
 .options > div > div{
     line-height:3em;   

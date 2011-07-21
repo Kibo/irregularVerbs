@@ -25,15 +25,15 @@
     </div><!-- /header -->
 
     <div data-role="content" >	                
-        <h2 class="center shadowText">Irregular verbs</h2>
+       
         <p class="center">
-            <img id="logo" src="img/happy.png" alt="logo" />
+            <img id="motto" src="img/motto.png" alt="Irregular verbs" />
         </p>
 	                         
-        <a href="#game" data-role="button" data-theme="b" >Game</a>            
-        <a href="#topten" data-role="button" data-theme="b">Top ten</a>
-        <a href="#search" data-role="button" data-theme="b">Search</a> 
-        <a href="#about" data-role="button" data-theme="b">About</a>     
+        <a href="#game" data-role="button" data-theme="a" >Game</a>            
+        <a href="#topten" data-role="button" data-theme="a">Top ten</a>
+        <a href="#search" data-role="button" data-theme="a">Search</a> 
+        <a href="#about" data-role="button" data-theme="a">About</a>     
                                             	
     </div><!-- /content -->
 
@@ -45,43 +45,43 @@
   
   <div data-role="page" data-theme="e" id="topten">
      
-      <div data-role="header" data-position="fixed" data-theme="b"> 
+      <div data-role="header" data-position="fixed" data-theme="a"> 
             <a href="#home" onclick="window.location.href='index.html'" data-role="button" data-icon="home" data-iconpos="notext" title="home">Home</a>            
             <h1>Top ten</h1>					           
     </div><!-- /header -->
 
     <div data-role="content" >	
         
-        <ol id="toptenList" data-role="listview" data-theme="b" data-count-theme="b"></ol>    	                           	
+        <ol id="toptenList" data-role="listview" data-theme="e" data-count-theme="a"></ol>    	                           	
         
     </div><!-- /content -->
 
-   <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true" data-theme="b">                                                                            
+   <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true" data-theme="a">                                                                            
     </div><!-- /footer -->
         
  </div> <!-- /result -->
  
-  <div data-role="page" data-theme="b" id="search">
+  <div data-role="page" data-theme="e" id="search">
      
-      <div data-role="header" data-position="fixed" data-theme="b">                  
+      <div data-role="header" data-position="fixed" data-theme="a">                  
             <a href="#home" onclick="window.location.href='index.html'" data-role="button" data-icon="home" data-iconpos="notext" title="home">Home</a> 
             <h1>Search</h1>					           
     </div><!-- /header -->
 
     <div data-role="content" >	
         
-        <ul id="verbsList" data-role="listview" data-filter="true" data-filter-placeholder="Search verb" ></ul>   
+        <ul id="verbsList" data-role="listview" data-filter="true" data-theme="e" data-filter-placeholder="Search verb" ></ul>   
         
     </div><!-- /content -->
 
-   <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true" data-theme="b">                                                                            
+   <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true" data-theme="a">                                                                            
     </div><!-- /footer -->
         
  </div> <!-- /search -->
     
-<div data-role="page"  id="game">
+<div data-role="page"  id="game" data-theme="e">
 
-    <div data-role="header" data-position="fixed" >
+    <div data-role="header" data-position="fixed" data-theme="a">
             <a href="#home" onclick="window.location.href='index.html'" data-role="button" data-icon="home" data-iconpos="notext" title="home">Home</a> 
             <h1>Game</h1>					           
     </div><!-- /header -->
@@ -124,7 +124,7 @@
         </div>                 	
     </div><!-- /content -->
       
-    <div id="gameFooter" data-role="footer" data-position="fixed" class="ui-bar"  >    
+    <div data-role="footer" data-position="fixed" class="ui-bar gameFooter"  data-theme="a">    
                        
         <div class="ui-grid-a">
             <div class="ui-block-a">
@@ -139,36 +139,41 @@
 
 <div data-role="page" data-theme="e" id="gameover">
         
-    <div data-role="header" data-position="fixed" data-theme="b">
+    <div data-role="header" data-position="fixed" data-theme="a">
             <a href="#home" onclick="window.location.href='index.html'"  data-role="button" data-icon="home" data-iconpos="notext" title="home">Home</a> 
             <h1>Game over</h1>					           
     </div><!-- /header -->
 
     <div data-role="content" >	
-	         
-        <h2 id="state" class="center shadowText"></h2>
-        <h4 class="bonus"></h4>
-                                      
-        <div data-role="fieldcontain">            
-        	<label for="name"><b>Your name</b></label>
-                <input type="text" name="name" id="name" value="" placeholder="your name"  />                  
-         
-                <div class="ui-grid-a">
-                    <div class="ui-block-a"><button type="button" data-theme="c" onclick="window.location.href='index.html'">Cancel</button></div>
-                    <div class="ui-block-b"><button id="saveResultsButton" type="button" data-theme="b">Save</button></div>	   
-                </div>
-        </div> 
-                	
+        <div id="gameoverBox">      
+            <img id="farawell" src="img/gameover.png" alt="logo" />             
+        </div>
+        
+        <input type="text" name="name" id="name" value="" placeholder="Write your pirate name!"  /> 
+                                                             	                                  
+        <div class="ui-grid-a">
+            <div class="ui-block-a"><button type="button" data-theme="c" onclick="window.location.href='index.html'">Cancel</button></div>
+            <div class="ui-block-b"><button id="saveResultsButton" type="button" data-theme="a">Save</button></div>	   
+        </div>
+                       	
     </div><!-- /content -->
 
-     <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true" data-theme="b">                                                                              
+    <div data-role="footer" data-position="fixed" class="ui-bar gameFooter" data-theme="a" >    
+                       
+        <div class="ui-grid-a">
+            <div class="ui-block-a">
+                <div class="bonus"></div>                
+            </div>
+            <div class="ui-block-b" ><div class="lives" ></div></div>	   
+        </div>        
+        
     </div><!-- /footer -->
             
 </div> <!-- /gameOver -->
 
 <div data-role="page" data-theme="e" id="options">
         
-    <div data-role="header" data-position="fixed">
+    <div data-role="header" data-position="fixed" data-theme="a">
             <a href="#home" onclick="window.location.href='index.html'"  data-role="button" data-icon="home" data-iconpos="notext" title="home">Home</a> 
             <h1>Options</h1>					           
     </div><!-- /header -->
@@ -177,7 +182,7 @@
         
          <div data-role="fieldcontain">
             <label for="select-lives"><b>Count of lives</b></label>
-            <select name="lives" id="select-lives" data-native-menu="false" >
+            <select name="lives" id="select-lives" data-native-menu="false" data-theme="a">
                 <option value="3">3 lives</option>  
                 <option value="2">2 lives</option>
                 <option value="1">1 live</option>                                                                         
@@ -186,7 +191,7 @@
                                                 
         <div data-role="fieldcontain">
             <label for="select-verbs" ><b>Count of verbs</b></label>
-            <select name="countOfVerbs" id="select-verbs" data-native-menu="false" >                    
+            <select name="countOfVerbs" id="select-verbs" data-native-menu="false" data-theme="a">                    
                     <option value="10">10 verbs</option>
                     <option value="20">20 verbs</option>
                     <option value="30">30 verbs</option>
@@ -198,7 +203,7 @@
         
         <div data-role="fieldcontain">
                 <label for="select-voice"><b>Play sound</b></label>
-                <select name="voice" id="select-voice" data-role="slider">
+                <select name="voice" id="select-voice" data-role="slider" data-theme="a">
                     <option value="on">On</option>
                     <option value="off">Off</option>                        
                 </select> 
@@ -206,7 +211,7 @@
                	                                        
     </div><!-- /content -->
 
-     <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true">        
+     <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true" data-theme="a">        
                                                                      
     </div><!-- /footer -->
             

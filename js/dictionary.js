@@ -182,12 +182,10 @@ DICTIONARY.game = (function(){
             }
             
             function checkStatus(){         
-               if(lives <= 0){                              
-                   $("#state").text( "GAME OVER!" );
+               if(lives <= 0){                                                
                    $.mobile.changePage("#gameover");
                }else if( idx.get() >= countOfVerbs-1){              
-                   $(".bonus").text( (bonus * lives) );
-                   $("#state").text( "YOU ARE WINNER!" );
+                   $(".bonus").text( (bonus * lives) );              
                    $.mobile.changePage("#gameover");
                }           
             }
