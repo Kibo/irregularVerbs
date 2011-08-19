@@ -169,7 +169,7 @@ DICTIONARY.game = (function(){
                                                         
                     $("#verbsList").append( 
                         ((head != verbs[i].tenses[0][0].toUpperCase() ) ? '<li data-role="list-divider">' + verbs[i].tenses[0][0].toUpperCase() + '</li>' : '') + 
-                        '<li data-icon="info"> \
+                        '<li data-icon="info" > \
                             <a href="#" data-voice="' + verbs[i].sound + '" > \
                                 <h3>' + verbs[i].tenses[0] + '</h3> \
                                 <p>' + verbs[i].tenses[0] +', ' + verbs[i].tenses[1] + ', ' + verbs[i].tenses[2] + '</p> \

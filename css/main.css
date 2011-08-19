@@ -1,3 +1,14 @@
+#game{
+    background-image:url(../img/bg.png);
+    background-repeat: no-repeat;
+    background-position:50% 50%;
+    -webkit-background-size: 100% 100%;         
+}
+
+#gameContent, #gameoverContent{
+    background:none;
+}
+
 .shadowText {
   color:white;  
   font-size: 300%;
@@ -40,32 +51,32 @@
 
 .chestCloseLeft{
     background:transparent url(../img/chestCloseLeft.png) no-repeat 50% 100%;  
-    -webkit-background-size: 70% auto ;           
+    -webkit-background-size: 75% auto ;           
 }
 
 .chestCloseMiddle{
     background:transparent url(../img/chestCloseMiddle.png) no-repeat 50% 70%;  
-    -webkit-background-size: 50% auto ;           
+    -webkit-background-size: 65% auto ;           
 }
 
 .chestCloseRight{
     background:transparent url(../img/chestCloseRight.png) no-repeat 50% 100%;  
-    -webkit-background-size: 70% auto ;           
+    -webkit-background-size: 75% auto ;           
 }
 
 .chestRatLeft{
     background:transparent url(../img/chestRatLeft.png) no-repeat 50% 100%;  
-    -webkit-background-size: 90% auto;    
+    -webkit-background-size: 95% auto;    
 }
 
 .chestRatMiddle{
     background:transparent url(../img/chestRatMiddle.png) no-repeat 50% 70%;  
-    -webkit-background-size: 50% auto ;    
+    -webkit-background-size: 65% auto ;    
 }
 
 .chestRatRight{
     background:transparent url(../img/chestRatRight.png) no-repeat 50% 100%;  
-    -webkit-background-size: 90% auto;    
+    -webkit-background-size: 95% auto;    
 }
 
 .chestOpenLeft{
@@ -75,7 +86,7 @@
 
 .chestOpenMiddle{
     background:transparent url(../img/chestOpenMiddle.png) no-repeat 50% 70%;  
-    -webkit-background-size: 50% auto ;     
+    -webkit-background-size: 65% auto ;     
 }
 
 .chestOpenRight{
@@ -85,17 +96,17 @@
 
 .chestParrotLeft{
     background:transparent url(../img/chestParrotLeft.png) no-repeat 50% 100%;  
-    -webkit-background-size: 70% auto;    
+    -webkit-background-size: 90% auto;    
 }
 
 .chestParrotMiddle{
     background:transparent url(../img/chestParrotMiddle.png) no-repeat 50% 70%;  
-    -webkit-background-size: 50% auto ;     
+    -webkit-background-size: 75% auto ;     
 }
 
 .chestParrotRight{
     background:transparent url(../img/chestParrotRight.png) no-repeat 50% 100%;  
-    -webkit-background-size: 70% auto;    
+    -webkit-background-size: 75% auto;    
 }
 
 #gameoverBox{
@@ -107,39 +118,34 @@
     line-height: 3em;       
 }
 
-.lives{
-    
-    margin-right:1.7em;
-    text-align: right;
-    
+.lives{        
+    margin-right:0.5em;
+    text-align: right;     
 }
 
 .bonus{
-    background:transparent url(../img/bonus.png) no-repeat 5px 4px;
+    background:transparent url(../img/bonus.png) no-repeat 0.2em 0.2em;
     padding-left:3em;    
     padding-right:1em;
-    -webkit-background-size: auto 70% ;         
+    -webkit-background-size: auto 80% ;         
     float:left;    
     color:#ccc;
 }
 
-
-
-.lives img{
-    vertical-align:middle;
+.lives img{    
     vertical-align:text-bottom;
 }
 
 
 .options > div > div{
     line-height:3em;   
-    padding-top:0.5em;
+    padding-top:1em;
     font-weight: bold;
     text-align: center;        
     max-width: 100px; /* --TODO- Media Queries */     
     margin:0 auto;
     font-size:90%;
-    cursor:move;
+    cursor:move;    
 }
 
 .key0{
@@ -182,6 +188,7 @@
 }
 
 
-/*  options list */
+/*  verbsList */
+
 
 
