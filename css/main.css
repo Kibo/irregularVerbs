@@ -1,11 +1,28 @@
-#game{
+.wrapper{
+    max-width:400px;
+    margin:0 auto;    
+    height:100%;
+}
+
+#homeContent img, 
+#gameoverContent img
+{
+    width:100%;
+    height:auto;
+}
+
+#game .wrapper{
     background-image:url(../img/bg.png);
     background-repeat: no-repeat;
     background-position:50% 50%;
-    -webkit-background-size: 100% 100%;         
+    -webkit-background-size: 100% 100%;                     
 }
 
-#gameContent, #gameoverContent{
+#gameContent{
+    padding-bottom:5em;
+}
+
+#gameContent{
     background:none;
 }
 
@@ -170,6 +187,14 @@
 
 
 /*  tools */
+
+.hide{
+    visibility:hidden;
+}
+
+.show{
+    visibility: visible; 
+}
 .center{text-align: center;}
 
 .bold{
@@ -187,8 +212,20 @@
     -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .3);
 }
 
-
-/*  verbsList */
+/* slightly enhanced, universal clearfix hack */
+.clearfix:after {
+     visibility: hidden;
+     display: block;
+     font-size: 0;
+     content: " ";
+     clear: both;
+     height: 0;
+     }
+.clearfix { display: inline-block; }
+/* start commented backslash hack \*/
+* html .clearfix { height: 1%; }
+.clearfix { display: block; }
+/* close commented backslash hack */
 
 
 

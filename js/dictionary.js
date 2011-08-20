@@ -24,7 +24,8 @@ DICTIONARY.game = (function(){
                 setting = DICTIONARY.setting();
                 topten = DICTIONARY.topten();                
                 idx = DICTIONARY.idx();   
-                tenses = DICTIONARY.tenses();                           
+                tenses = DICTIONARY.tenses();                    
+                setChest();                
                 showTense();
                 showOptions();                
                 showStatus();
@@ -62,13 +63,14 @@ DICTIONARY.game = (function(){
                 switchNextButton();                                               
             }
             
-            function setChest(){
+            function setChest(){                                
                 for(var i = 0; i <= 2; i++){   
                     var direction = (i == 0) ? 'Left' : (i == 1)? 'Middle' : 'Right';
-                    $( '#tense'+i ).removeClass('chestRat' + direction);                
-                    $( '#tense'+i ).removeClass('chestOpen' + direction);  
-                    $( '#tense'+i ).removeClass('chestParrot' + direction); 
-                    $( '#tense'+i ).addClass('chestClose' + direction);                
+                    $( '#tense'+i ).removeAttr('class');
+                    $( '#tense'+i ).addClass('chestClose' + direction);
+                    $( '#tense'+i ).addClass('makeMeDroppable'); 
+                    $( '#tense'+i ).droppable();
+                    $( '#tense'+i ).droppable( 'enable' );
                  }                
             }
                                    
@@ -92,9 +94,9 @@ DICTIONARY.game = (function(){
                 random = utils.random();
                 var tense = getVerb().tenses[random];
                 var sel = "#tense" + random;
-                //$( sel ).text( tense );
-                $( sel ).append( '<span class="corner shadow">' + tense + '</span>');
-                $( sel ).attr("ondragover", "return true"); 
+                
+                $( sel ).append( '<span class="corner shadow">' + tense + '</span>');                
+                $( sel ).droppable( 'disable' );
                 var dirrection = (random == 0) ? 'Left' : (random == 1)? 'Middle' : 'Right';                     
                 $( sel ).removeClass( 'chestClose' + dirrection );
                 $( sel ).addClass('chestParrot' + dirrection);            
@@ -103,18 +105,17 @@ DICTIONARY.game = (function(){
             function showOptions(){               
                 var options = getOptions();
                 for(var i = 0; i <= ( options.length - 1 ); i++){     
-                    $('#opti' + i).text(options[i]);
-                    $('#opti' + i).attr('draggable', true);  
+                    $('#opti' + i).text(options[i]);                    
                     $('#opti' + i).removeAttr('class');  
-                    $('#opti' + i).addClass('key' + ((random + i)%4) );                   
+                    $('#opti' + i).addClass('key' + ((random + i)%4) ); 
+                    $('#opti' + i).addClass('makeMeDraggable');  
                     
-                    $('#opti' + i).bind('dragstart', function(event){
-                        event.dataTransfer.effectAllowed = 'copy';                
-                        event.dataTransfer.setData("text",  this.id );    
-                        $('#opti' + i).css('cursor', 'pointer');
-                    }); 
-                    
-                    $('#opti' + i).show();
+                    $('#opti' + i).draggable({
+                        containment: '#gameContent',
+                        cursor: 'move',                       
+                        revert: true                        
+                    });
+              
                 }                                                           
             }
                                  
@@ -192,13 +193,18 @@ DICTIONARY.game = (function(){
             
             function bindEvents(){  
                 for(var i = 0; i<=2; i++){
-                    $('#tense' + i).bind('drop', function(event){
+                    $('#tense' + i).bind('drop', function(event, ui){
+                                                                                              
                         event.stopPropagation();
                         event.preventDefault();                    
-                        var id = event.dataTransfer.getData("text"); 
+                        
+                        var id = ui.draggable.attr('id')
+                        //var id = event.dataTransfer.getData("text"); 
+                        
                         var text = $('#' + id).text();
 
-                        $('#' + id).hide();
+                        //$('#' + id).hide();
+                        $('#' + id).addClass('hide');
 
                         //$(event.target).text(text);
                         $(event.target).append('<span class="corner shadow">' + text + '</span>');
@@ -248,8 +254,9 @@ DICTIONARY.game = (function(){
                 $('#verbsList li a').bind('click', function(event){                   
                     playSound($(event.target).attr("data-voice"));
                 });
+                                                                                                            
             }
-            
+                       
             function getIndex( idTense ){               
                 return idTense.substring(idTense.length-1, idTense.length); 
             }
@@ -263,13 +270,14 @@ DICTIONARY.game = (function(){
         DICTIONARY.tenses = function(){
         
             function lock( idTense ){                           
-                $("#" + idTense).attr("ondragover", "return true");                
+                //$("#" + idTense).attr("ondragover", "return true");  
+                $("#" + idTense).droppable( 'disable' );
             }
             
            function unlock(){
                for(var i = 0; i<=2; i++){   
                    $("#tense" + i).text("");
-                   $("#tense" + i).attr("ondragover", "return false");
+                   //$("#tense" + i).attr("ondragover", "return false");
                }           
             }
                                    

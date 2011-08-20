@@ -5,31 +5,35 @@
 	<link rel="stylesheet" href="css/jquery.mobile-1.0b2.min.css" />
         <script src="js/jquery-1.6.2.min.js"></script>
         <script src="js/jquery.mobile-1.0b2.min.js"></script>
+        <script src="js/jquery-ui-1.8.16.custom.min.js"></script>
                                    
         <!-- kibo -->         
         <link rel="stylesheet" href="css/main.css" />        
         <script src="js/dictionary.js"></script>
        			
-    <script>                                           
-        $(document).ready(function(){              
+    <script>  
+        $(init);
+        
+        function init(){
             DICTIONARY.game.init();
-        });                             
+        }                                          
     </script>	
 			
 </head> 
 <body>     
- <div data-role="page" data-theme="e"  id="home" >
+ <div data-role="page" data-theme="a" id="home" >
+     <div class="wrapper" >
      
     <div data-role="header" data-position="fixed" data-theme="a" >            
         <h1>Home</h1>					           
     </div><!-- /header -->
 
-    <div data-role="content" >	                
+    <div data-role="content" id="homeContent" data-theme="e">	                
        
         <p class="center">
-            <img id="motto" src="img/motto.png" alt="Irregular verbs" />
+            <img id="motto" src="img/motto.png" alt="Irregular verbs"/>
         </p>
-	                         
+      	                         
         <a href="#game" data-role="button" data-theme="a" >Game</a>            
         <a href="#topten" data-role="button" data-theme="a">Top ten</a>
         <a href="#search" data-role="button" data-theme="a">Search</a> 
@@ -37,14 +41,16 @@
                                             	
     </div><!-- /content -->
 
-   <div data-role="footer" data-position="fixed" class="ui-bar" data-theme="a">         
-        <a href="#options" data-role="button" data-icon="gear">Options</a>                                                              
-    </div><!-- /footer -->
-        
+   <div data-role="footer" data-position="fixed"  data-theme="a" >         
+       <a href="#options" data-role="button" data-icon="gear">Options</a>        
+    </div><!-- /footer -->        
+    
+    </div> <!-- /wrapper -->
+    
  </div> <!-- /home -->
   
-  <div data-role="page" data-theme="e" id="topten">
-     
+  <div data-role="page" data-theme="a"  id="topten">
+      <div class="wrapper">
       <div data-role="header" data-position="fixed" data-theme="a"> 
             <a href="#home" onclick="window.location.href='index.html'" data-role="button" data-icon="home" data-iconpos="notext" title="home">Home</a>            
             <h1>Top ten</h1>					           
@@ -56,12 +62,14 @@
         
     </div><!-- /content -->
 
-   <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true" data-theme="a">                                                                            
+   <div data-role="footer" data-position="fixed" data-theme="a">                                                                            
     </div><!-- /footer -->
         
- </div> <!-- /result -->
+    </div> <!-- /wrapper -->
+ </div> <!-- /topten -->
  
-  <div data-role="page" data-theme="a" id="search">
+  <div data-role="page" data-theme="a"  id="search">
+      <div class="wrapper" >
      
       <div data-role="header" data-position="fixed" data-theme="a">                  
             <a href="#home" onclick="window.location.href='index.html'" data-role="button" data-icon="home" data-iconpos="notext" title="home">Home</a> 
@@ -74,47 +82,52 @@
         
     </div><!-- /content -->
 
-   <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true" data-theme="a">                                                                            
+   <div data-role="footer" data-position="fixed" data-theme="a">                                                                            
     </div><!-- /footer -->
+    
+    </div> <!-- /wrapper -->
         
  </div> <!-- /search -->
     
-<div data-role="page"  id="game" data-theme="e">
+<div data-role="page" data-theme="a" id="game">
+    <div class="wrapper">
 
     <div data-role="header" data-position="fixed" data-theme="a">
             <a href="#home" onclick="window.location.href='index.html'" data-role="button" data-icon="home" data-iconpos="notext" title="home">Home</a> 
             <h1>Game</h1>					           
     </div><!-- /header -->
 
-    <div data-role="content" id="gameContent">	
+    <div data-role="content" id="gameContent" data-theme="e">	
                 
         <div class="ui-grid-b tenses">
             <div  class="ui-block-a" >
-                <div id="tense0" class="chestCloseLeft" ondragover="return false"></div>                       
+                <div id="tense0" class="makeMyDroppable"></div>                       
             </div>
             <div class="ui-block-b">
-                <div id="tense1" class="chestCloseMiddle"  ondragover="return false"></div>                  
+                <div id="tense1" class="makeMyDroppable"></div>                  
             </div>
             <div class="ui-block-c">
-                <div id="tense2" class="chestCloseRight" ondragover="return false"></div>                
+                <div id="tense2" class="makeMyDroppable"></div>                
             </div>
         </div><!-- /grid-b -->
 	                                
-        <div class="ui-grid-c options">
-            <div class="ui-block-a">
+        <div class="options">
+            <div>
                 <div id="opti0"></div>                              
+            </div>                        
+                                
+            <div style="float:left; width:50%;">
+                <div id="opti1" class="hidden"></div>                
             </div>
-            <div class="ui-block-b">
-                <div id="opti1"></div>
-                
+            
+            <div style="float:right; width:50%;">
+                <div id="opti2"></div>                
             </div>
-            <div class="ui-block-c">
-                <div id="opti2"></div>
-                
-            </div>
-            <div class="ui-block-d">
-                <div id="opti3"></div>
-                
+                      
+            <div style="clear:both"></div>
+            
+            <div>
+                <div id="opti3"></div>                
             </div>
         </div><!-- /grid-c -->                               
                                              
@@ -134,17 +147,20 @@
         </div>        
         
     </div><!-- /footer -->
+    
+    </div> <!-- /wrapper -->
 
 </div><!-- /game -->
 
-<div data-role="page" data-theme="e" id="gameover">
+<div data-role="page" data-theme="a" id="gameover">
+    <div class="wrapper" >
         
     <div data-role="header" data-position="fixed" >
             <a href="#home" onclick="window.location.href='index.html'"  data-role="button" data-icon="home" data-iconpos="notext" title="home">Home</a> 
             <h1>Game over</h1>					           
     </div><!-- /header -->
 
-    <div data-role="content" id="gameoverContent">	
+    <div data-role="content" id="gameoverContent" data-theme="e">	
         <div id="gameoverBox">      
             <img id="farawell" src="img/gameover.png" alt="logo" />             
         </div>
@@ -168,17 +184,20 @@
         </div>        
         
     </div><!-- /footer -->
+    
+    </div> <!-- /wrapper -->
             
 </div> <!-- /gameOver -->
 
-<div data-role="page" data-theme="e" id="options">
+<div data-role="page" data-theme="a" id="options">
+    <div class="wrapper">
         
     <div data-role="header" data-position="fixed" data-theme="a">
             <a href="#home" onclick="window.location.href='index.html'"  data-role="button" data-icon="home" data-iconpos="notext" title="home">Home</a> 
             <h1>Options</h1>					           
     </div><!-- /header -->
 
-    <div data-role="content" >
+    <div data-role="content" id="optionsContent" data-theme="e">
         
          <div data-role="fieldcontain">
             <label for="select-lives"><b>Count of lives</b></label>
@@ -211,9 +230,11 @@
                	                                        
     </div><!-- /content -->
 
-     <div data-role="footer" data-position="fixed" class="ui-bar" data-inline="true" data-theme="a">        
+     <div data-role="footer" data-position="fixed" data-theme="a">        
                                                                      
     </div><!-- /footer -->
+    
+    </div> <!-- /wrapper -->
             
 </div> <!-- /options -->
 
