@@ -15,7 +15,9 @@
     background-image:url(../img/bg.png);
     background-repeat: no-repeat;
     background-position:50% 50%;
-    -webkit-background-size: 100% 100%;                     
+    -webkit-background-size: 100% 100%; 
+    -moz-background-size: 100% 100%; 
+    background-size: 100% 100%; 
 }
 
 #gameContent{
@@ -69,61 +71,85 @@
 .chestCloseLeft{
     background:transparent url(../img/chestCloseLeft.png) no-repeat 50% 100%;  
     -webkit-background-size: 75% auto ;           
+    -moz-background-size: 75% auto; 
+    background-size: 75% auto; 
 }
 
 .chestCloseMiddle{
     background:transparent url(../img/chestCloseMiddle.png) no-repeat 50% 70%;  
-    -webkit-background-size: 65% auto ;           
+    -webkit-background-size: 65% auto ;   
+    -moz-background-size: 65% auto; 
+    background-size: 65% auto; 
 }
 
 .chestCloseRight{
     background:transparent url(../img/chestCloseRight.png) no-repeat 50% 100%;  
-    -webkit-background-size: 75% auto ;           
+    -webkit-background-size: 75% auto ;   
+    -moz-background-size: 75% auto; 
+    background-size: 75% auto; 
 }
 
 .chestRatLeft{
     background:transparent url(../img/chestRatLeft.png) no-repeat 50% 100%;  
-    -webkit-background-size: 95% auto;    
+    -webkit-background-size: 95% auto; 
+    -moz-background-size: 95% auto; 
+    background-size: 95% auto; 
 }
 
 .chestRatMiddle{
     background:transparent url(../img/chestRatMiddle.png) no-repeat 50% 70%;  
     -webkit-background-size: 65% auto ;    
+    -moz-background-size: 65% auto; 
+    background-size: 65% auto; 
 }
 
 .chestRatRight{
     background:transparent url(../img/chestRatRight.png) no-repeat 50% 100%;  
     -webkit-background-size: 95% auto;    
+    -moz-background-size: 95% auto; 
+    background-size: 95% auto; 
 }
 
 .chestOpenLeft{
     background:transparent url(../img/chestOpenLeft.png) no-repeat 50% 100%;  
-    -webkit-background-size: 90% auto;    
+    -webkit-background-size: 90% auto;   
+    -moz-background-size: 90% auto; 
+    background-size: 90% auto; 
 }
 
 .chestOpenMiddle{
     background:transparent url(../img/chestOpenMiddle.png) no-repeat 50% 70%;  
-    -webkit-background-size: 65% auto ;     
+    -webkit-background-size: 65% auto ;    
+    -moz-background-size: 65% auto; 
+    background-size: 65% auto; 
 }
 
 .chestOpenRight{
     background:transparent url(../img/chestOpenRight.png) no-repeat 50% 100%;  
     -webkit-background-size: 90% auto;    
+    -moz-background-size: 90% auto; 
+    background-size: 90% auto; 
 }
 
 .chestParrotLeft{
     background:transparent url(../img/chestParrotLeft.png) no-repeat 50% 100%;  
-    -webkit-background-size: 90% auto;    
+    -webkit-background-size: 90% auto;  
+    -moz-background-size: 90% auto; 
+    background-size: 90% auto; 
 }
 
 .chestParrotMiddle{
     background:transparent url(../img/chestParrotMiddle.png) no-repeat 50% 70%;  
-    -webkit-background-size: 75% auto ;     
+    -webkit-background-size: 75% auto ; 
+    -moz-background-size: 75% auto; 
+    background-size: 75% auto; 
 }
 
 .chestParrotRight{
     background:transparent url(../img/chestParrotRight.png) no-repeat 50% 100%;  
-    -webkit-background-size: 75% auto;    
+    -webkit-background-size: 75% auto;   
+    -moz-background-size: 75% auto; 
+    background-size: 75% auto; 
 }
 
 #gameoverBox{
@@ -144,7 +170,9 @@
     background:transparent url(../img/bonus.png) no-repeat 0.2em 0.2em;
     padding-left:3em;    
     padding-right:1em;
-    -webkit-background-size: auto 80% ;         
+    -webkit-background-size: auto 80% ;      
+    -moz-background-size: auto 80%; 
+    background-size: auto 80%; 
     float:left;    
     color:#ccc;
 }
@@ -168,21 +196,29 @@
 .key0{
      background:transparent url(../img/key0.png) no-repeat 50% 0; 
     -webkit-background-size: 90% auto ;     
+    -moz-background-size: 90% auto; 
+    background-size: 90% auto; 
 }
 
 .key1{
      background:transparent url(../img/key1.png) no-repeat 50% 0; 
-    -webkit-background-size: 90% auto;   
+    -webkit-background-size: 90% auto;  
+    -moz-background-size: 90% auto; 
+    background-size: 90% auto; 
 }
 
 .key2{
      background:transparent url(../img/key2.png) no-repeat 50% 0; 
     -webkit-background-size: 90% auto ;      
+    -moz-background-size: 90% auto; 
+    background-size: 90% auto; 
 }
 
 .key3{
      background:transparent url(../img/key3.png) no-repeat 50% 0; 
-    -webkit-background-size: 90% auto ;      
+    -webkit-background-size: 90% auto ;     
+    -moz-background-size: 90% auto; 
+    background-size: 90% auto; 
 }
 
 
@@ -203,6 +239,7 @@
 
 .corner{
     -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
     border-radius: 10px;
 }
 
@@ -229,3 +266,8 @@
 
 
 
+/* --ABOUT --*/
+dt{
+    float:left;
+    padding-right:1em;
+}
