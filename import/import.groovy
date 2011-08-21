@@ -2,8 +2,8 @@ class Import {
     
     def static SOURCE = "/home/tomas/NetBeansProjects/irregularVerbs/import/irregular.csv"
     def static DESTINATION_DIR = "/home/tomas/NetBeansProjects/irregularVerbs/data"
-    def static DOWNLOAD_MP3 = false
-    
+    def static DOWNLOAD_MP3 = true
+        
     def static void main( args ){      
         make()
     }
