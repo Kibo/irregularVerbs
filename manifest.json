@@ -1,0 +1,14 @@
+{
+  "name": "Pirate verbs 1",
+  "description": "English irregular verbs: level 1",
+  "version": "1.0",
+  "app": {
+    "launch": {
+      "local_path": "index.html"
+    }
+  },
+  "icons": {
+    "16": "img/icon_16.png",
+    "128": "img/icon_128.png"
+  }
+}
